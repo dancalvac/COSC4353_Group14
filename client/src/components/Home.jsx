@@ -1,20 +1,26 @@
 import React from "react";
+import {useNavigate} from 'react-router-dom';
 import './Home.css';
 
 function Home() {
+    const navigate = useNavigate();
+
     const handleLogin = () => {
         // Navigate to login page - you can implement this with React Router later
         console.log("Navigate to login page");
+        navigate('/login'); 
     };
 
     const handleRegister = () => {
         // Navigate to register page - you can implement this with React Router later
         console.log("Navigate to register page");
+        navigate('/register'); 
     };
 
     const handleStartImpact = () => {
         // Navigate to main app or events page
         console.log("Navigate to events/main page");
+        navigate('/register'); 
     };
 
     return (
