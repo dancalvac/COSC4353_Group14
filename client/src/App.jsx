@@ -5,6 +5,8 @@ import Home from './components/Home';
 import Register from './components/Register';
 import Login from './components/Login';
 import LoginAfterRegister from './components/LoginAfterRegister';
+import VolunteerHistory from './components/VolunteerHistory';
+import VolunteerNoti from './components/VolunteerNoti';
 
 function App() {
   
@@ -17,6 +19,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/loginAfterRegister" element={<LoginAfterRegister />} />
+        <Route path="/volunteerHistory" element={<VolunteerHistory />} />
+        <Route path="/volunteerNotifications" element={<VolunteerNoti />} />
+        {/* Add more routes as needed */}
+        <Route path="*" element={<Navigate to="/home" />} /> {/* Redirects any unknown routes to home page */}
       </Routes>
     </Router>
   )
