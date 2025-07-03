@@ -5,6 +5,7 @@ import Home from './components/Home';
 import Register from './components/Register';
 import Login from './components/Login';
 import LoginAfterRegister from './components/LoginAfterRegister';
+import VolunteerProfile from './components/VolunteerProfile';
 import VolunteerHistory from './components/VolunteerHistory';
 import VolunteerNoti from './components/VolunteerNoti';
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/loginAfterRegister" element={<LoginAfterRegister />} />
+        <Route path="/volunteerProfile" element={<VolunteerProfile />} />
         <Route path="/volunteerHistory" element={<VolunteerHistory />} />
         <Route path="/volunteerNotifications" element={<VolunteerNoti />} />
         {/* Add more routes as needed */}
