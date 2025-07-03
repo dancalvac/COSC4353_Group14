@@ -12,7 +12,7 @@ function VolunteerHistory() {
 
     const handleNotifications = () => {
         console.log("Navigate to notifications");
-        navigate('/notifications');
+        navigate('/volunteerNotifications');
     };
 
     const handleLogout = () => {

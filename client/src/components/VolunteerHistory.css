@@ -43,17 +43,18 @@
 .vh-logout-button {
     margin-top: auto;
     padding: 15px 20px;
-    background: none;
-    border: none;
+    background-color:hsl(0, 93%, 50%);
+    border: solid black 1px;
+    border-radius: 20px;
     text-align: left;
     cursor: pointer;
     font-size: 25px;
-    color: #d32f2f;
+    color: black;
     transition: background-color 0.3s ease;
 }
 
 .vh-logout-button:hover {
-    background-color: #c0c0c0;
+    background-color: hsl(0, 93%, 40%);
 }
 
 /* Main Content Area */
