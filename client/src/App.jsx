@@ -11,6 +11,7 @@ import VolunteerNoti from './components/VolunteerNoti';
 import EventManagement from './components/EventManagement';
 import EventCreate from './components/EventCreate';
 import EventEdit from './components/EventEdit';
+import AdminMatching from './components/AdminMatching'; 
 
 function App() {
   
@@ -29,6 +30,7 @@ function App() {
         <Route path="/eventManagement" element={<EventManagement />} />
         <Route path="/eventCreate" element={<EventCreate />} />
         <Route path="/eventEdit" element={<EventEdit />} />
+        <Route path="/adminMatching" element={<AdminMatching />} />
         {/* Add more routes as needed */}
         <Route path="*" element={<Navigate to="/home" />} /> {/* Redirects any unknown routes to home page */}
       </Routes>
