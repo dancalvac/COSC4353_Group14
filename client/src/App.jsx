@@ -8,6 +8,7 @@ import LoginAfterRegister from './components/LoginAfterRegister';
 import VolunteerProfile from './components/VolunteerProfile';
 import VolunteerHistory from './components/VolunteerHistory';
 import VolunteerNoti from './components/VolunteerNoti';
+import AdminMatching from './components/AdminMatching'; 
 
 function App() {
   
@@ -23,6 +24,7 @@ function App() {
         <Route path="/volunteerProfile" element={<VolunteerProfile />} />
         <Route path="/volunteerHistory" element={<VolunteerHistory />} />
         <Route path="/volunteerNotifications" element={<VolunteerNoti />} />
+        <Route path="/adminMatching" element={<AdminMatching />} />
         {/* Add more routes as needed */}
         <Route path="*" element={<Navigate to="/home" />} /> {/* Redirects any unknown routes to home page */}
       </Routes>
