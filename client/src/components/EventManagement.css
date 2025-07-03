@@ -1,0 +1,127 @@
+.emp-container {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.emp-sidebar {
+  width: 180px;
+  background: #ededed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.emp-sidebar-links {
+  margin-top: 30px;
+}
+
+.emp-sidebar-link {
+  padding: 16px 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.emp-sidebar-link.active {
+  font-weight: bold;
+}
+
+.emp-logout {
+  color: #d32f2f;
+  font-size: 1.2rem;
+  margin: 30px 10px;
+  cursor: pointer;
+}
+
+.emp-main {
+  flex: 1;
+  padding: 30px 40px;
+  background: #fff;
+}
+
+.emp-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.emp-title {
+  margin-bottom: 0; /* Remove bottom margin since the row handles spacing */
+}
+
+.emp-input {
+  padding: 6px 8px;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  min-width: 180px;
+}
+
+.emp-desc-input {
+  min-width: 260px;
+  min-height: 40px;
+  resize: vertical;
+}
+
+.emp-create-btn {
+  background: #29b6f6;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-weight: bold;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.emp-event-card {
+  background: #f7f7f7;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  margin-bottom: 18px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.emp-event-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.emp-event-fields label {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.emp-event-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 10px;
+}
+
+.emp-edit-btn {
+  background: #29b6f6;
+  color: #fff;
+  border: none;
+  padding: 6px 18px;
+  border-radius: 3px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.emp-delete-btn {
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  padding: 6px 18px;
+  border-radius: 3px;
+  font-weight: bold;
+  cursor: pointer;
+}

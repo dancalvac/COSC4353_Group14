@@ -1,0 +1,116 @@
+.ec-container {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.ec-sidebar {
+  width: 180px;
+  background: #ededed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.ec-sidebar-links {
+  margin-top: 30px;
+}
+
+.ec-sidebar-link {
+  padding: 16px 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.ec-sidebar-link.active {
+  font-weight: bold;
+}
+
+.ec-logout {
+  color: #d32f2f;
+  font-size: 1.2rem;
+  margin: 30px 10px;
+  cursor: pointer;
+}
+
+.ec-main {
+  flex: 1;
+  padding: 30px 40px;
+  background: #fff;
+}
+
+.ec-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.ec-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.ec-header-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.ec-cancel-btn {
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  padding: 8px 28px;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.ec-publish-btn {
+  background: #29b6f6;
+  color: #fff;
+  border: none;
+  padding: 8px 28px;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.ec-form {
+  background: #dedede;
+  border-radius: 5px;
+  padding: 24px 24px 24px 24px;
+  display: flex;
+  gap: 32px;
+}
+
+.ec-form-left,
+.ec-form-right {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+}
+
+.ec-form-right {
+  max-width: 300px;
+}
+
+.ec-input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 6px 8px;
+  font-size: 1rem;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.ec-textarea {
+  min-height: 100px;
+  resize: vertical;
+}

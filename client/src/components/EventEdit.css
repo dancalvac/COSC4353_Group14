@@ -1,0 +1,116 @@
+.ee-container {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.ee-sidebar {
+  width: 180px;
+  background: #ededed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.ee-sidebar-links {
+  margin-top: 30px;
+}
+
+.ee-sidebar-link {
+  padding: 16px 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.ee-sidebar-link.active {
+  font-weight: bold;
+}
+
+.ee-logout {
+  color: #d32f2f;
+  font-size: 1.2rem;
+  margin: 30px 10px;
+  cursor: pointer;
+}
+
+.ee-main {
+  flex: 1;
+  padding: 30px 40px;
+  background: #fff;
+}
+
+.ee-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.ee-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.ee-header-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.ee-delete-btn {
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  padding: 8px 28px;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.ee-save-btn {
+  background: #29b6f6;
+  color: #fff;
+  border: none;
+  padding: 8px 28px;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.ee-form {
+  background: #dedede;
+  border-radius: 5px;
+  padding: 24px 24px 24px 24px;
+  display: flex;
+  gap: 32px;
+}
+
+.ee-form-left,
+.ee-form-right {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+}
+
+.ee-form-right {
+  max-width: 300px;
+}
+
+.ee-input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 6px 8px;
+  font-size: 1rem;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.ee-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
