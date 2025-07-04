@@ -12,49 +12,40 @@
 
 /* Sidebar Navigation font-size*/
 .am-sidebar {
-    width: 200px;
-    background-color: #d3d3d3;
-    padding: 20px 0;
-    display: flex;
-    flex-direction: column;
+  width: 200px;
+  background: #ededed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+  gap: 0;
+}
+
+.am-sidebar-links {
+  margin-top: 30px;
 }
 
 .am-sidebar-item {
-    padding: 15px 20px;
-    background: none;
-    border: none;
-    text-align: left;
-    cursor: pointer;
-    font-size: 25px;
-    color: #333;
-    transition: background-color 0.3s ease;
-}
-
-.am-sidebar-item:hover {
-    background-color: #c0c0c0;
+ padding: 16px 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
 }
 
 .am-sidebar-item.active {
-    background-color: #b0b0b0;
     font-weight: bold;
 }
 
 .am-logout-button {
-    margin-top: auto;
-    padding: 15px 20px;
-    background-color:hsl(0, 93%, 50%);
-    border: solid black 1px;
-    border-radius: 20px;
-    text-align: left;
-    cursor: pointer;
-    font-size: 25px;
-    color: black;
-    transition: background-color 0.3s ease;
+  color: #d32f2f;
+  font-size: 1.2rem;
+  margin: 30px 10px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: center;
 }
 
-.am-logout-button:hover {
-    background-color: hsl(0, 93%, 40%);
-}
+
 /* Main Content Area */
 .am-main-content {
     flex: 1;
@@ -82,44 +73,65 @@
         border: 1px solid #ccc;
         border-radius: 8px;
         padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center contents horizontally */
+        justify-content: space-between;
+        height: 100%;
     }
 
     .am-volunteer-name {
         font-size:20px;
         margin-bottom: 10px;
+        text-align: center;
     }
 
     .am-volunteer-skills {
         font-size: 16px;
         margin-bottom: 15px;
         color: #555;
+        text-align: center;
     }
 
 
     /*Match controls*/
     .am-match-controls {
         display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
         gap: 10px;
+        margin-top: auto;
     }
 
     .am-event-select {
-        flex:1;
+        width: 100%;
+        max-width: 220px;
         padding: 8px;
         border: 1px solid #ccc;
         border-radius: 4px;
+        margin-bottom: 0;
+        margin-left: 0;
+        margin-right: 0;
+        display: block;
     }
 
     .am-match-button {
+        width: 100%;
+        max-width: 120px;
         padding: 8px 12px;
         background-color: #4caf50;
         color: white;
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        margin-top: 0;
+        margin-bottom: 0;
+        display: block;
     }
 
     .am-match-button:hover {
-        background-color: #45a049
+        background-color: #45a049;
     }
 
 /* Responsive Design */
@@ -161,11 +173,13 @@
     
     .am-match-controls {
         flex-direction: column;
+        align-items: center;
     }
 
     .am-event-select,
     .am-match-button {
-        width:100%;
+        width: 100%;
+        max-width: none;
     }
     
 }

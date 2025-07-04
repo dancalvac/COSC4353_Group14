@@ -27,7 +27,7 @@ function AdminMatching() {
 
     const handleEvents = () => {
         console.log("Navigate to Admin Events");
-            navigate('/adminEvents');
+            navigate('/eventManagement');
     };
 
     const handleLogout = () => {
@@ -44,15 +44,23 @@ function AdminMatching() {
         <div className="am-admin-matching">
             {/* Sidebar */}
             <div className="am-sidebar">
-                <button className="am-sidebar-item" onClick={handleEvents}>
-                    Events
-                </button>
-                <button className="am-sidebar-item active">
-                    Volunteer Matching
-                </button>
-                <button className="am-logout-button" onClick={handleLogout}>
+                <div className="am-sidebar-links">
+                    <div
+                        className="am-sidebar-item"
+                        onClick={handleEvents}
+                    >
+                        Events
+                    </div>
+                    <div className="am-sidebar-item active">
+                        Volunteer Matching
+                    </div>
+                </div>
+                <div
+                    className="am-logout-button"
+                    onClick={handleLogout}
+                >
                     Log Out
-                </button>
+                </div>
             </div>
 
             {/* Main Content*/}

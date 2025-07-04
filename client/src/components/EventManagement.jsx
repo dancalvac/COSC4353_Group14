@@ -29,12 +29,16 @@ function EventManagementPage() {
     navigate("/eventCreate");
   };
 
+  const handleNavToVolMatching = () => {
+    navigate("/adminMatching");
+  }
+
   return (
     <div className="emp-container">
       <div className="emp-sidebar">
         <div className="emp-sidebar-links">
           <div className="emp-sidebar-link active">Events</div>
-          <div className="emp-sidebar-link">Volunteer Matching</div>
+          <div className="emp-sidebar-link" onClick={handleNavToVolMatching}>Volunteer Matching</div>
         </div>
         <div className="emp-logout" onClick={handleLogout}>
           Log Out
