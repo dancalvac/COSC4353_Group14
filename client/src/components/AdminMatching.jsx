@@ -1,28 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import './AdminMatching.css';
 
 function AdminMatching() {
     const navigate = useNavigate();
+    const [volunteers, setVolunteers] = useState([]);
+    const [events, setEvents] = useState([]);
+
+    useEffect(() => {
+        /* Some hard coded volunteer names and events for now */
+        const sampleVolunteers = [
+            { id: 1, name: "Charity Smith", skills: "First Aid, ASL" },
+            { id: 2, name: "Henry Nguyen",   skills: "Logistics, Driving" },
+            { id: 3, name: "Max Gibson",    skills: "Photography, Bilingual" }
+        ];
+        const sampleEvents = [
+            { id: 1, name: "Community Cleanup", date: "2025-07-15" },
+            { id: 2, name: "Fundraising Gala",  date: "2025-08-01" },
+            { id: 3, name: "Food Drive", date: "2025-09-10" }
+        ];
+        setVolunteers(sampleVolunteers);
+        setEvents(sampleEvents);
+    }, []);
 
     const handleEvents = () => {
         console.log("Navigate to Admin Events");
-        navigate('/adminEvents');
+            navigate('/adminEvents');
     };
-
 
     const handleLogout = () => {
-        console.log("Logout admin");
+        console.log("Logout admin")
         navigate('/');
     };
+
+    const handleMatch = (volunteerId, eventId) => {
+        console.log(`Match volunteer ${volunteerId} → event ${eventId}`);
+        setVolunteers(v => v.filter(x => x.id !== volunteerId));
+    };
+
     return (
         <div className="am-admin-matching">
-            {/* Sidebar Navigation */}
+            {/* Sidebar */}
             <div className="am-sidebar">
                 <button className="am-sidebar-item" onClick={handleEvents}>
                     Events
                 </button>
-                <button className="am-sidebar-item active" >
+                <button className="am-sidebar-item active">
                     Volunteer Matching
                 </button>
                 <button className="am-logout-button" onClick={handleLogout}>
@@ -30,10 +53,44 @@ function AdminMatching() {
                 </button>
             </div>
 
-            {/* Main Content */}
+            {/* Main Content*/}
             <div className="am-main-content">
                 <h1 className="am-matching-title">Volunteer Matching</h1>
-                <p>No available volunteers</p>
+
+                {volunteers.length === 0 ? (
+                    <p className="am-no-volunteers">No available volunteers</p>
+                ) : (
+                    <div className="am-volunteer-list">
+                        {volunteers.map(vol => (
+                            <div key={vol.id} className="am-volunteer-card">
+                                <h2 className="am-volunteer-name">{vol.name}</h2>
+                                <p className="am-volunteer-skills">{vol.skills}</p>
+                                <div className="am-match-controls">
+                                    <select className="am-event-select" defaultValue="">
+                                        <option value="" disabled>
+                                            Select Event
+                                        </option>
+                                        {events.map(e => (
+                                            <option key={e.id} value={e.id}>
+                                                {e.name} ({e.date})
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <button
+                                        className="am-match-button"
+                                        onClick={e => {
+                                            const select = e.target.previousSibling;
+                                            const eventId = parseInt(select.value);
+                                            if (eventId) handleMatch(vol.id, eventId);
+                                        }}
+                                    >
+                                        Match
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
