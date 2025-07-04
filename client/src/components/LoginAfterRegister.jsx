@@ -21,7 +21,7 @@ function LoginAfterRegister(){
 
                 <div className="w-75 d-flex flex-column text-center">
                     <h3>Thank you for registering!</h3>
-                    <h3>Please login to complete the registration</h3>
+                    <h3>Please login to complete the registration.</h3>
                 </div>
 
                 <button type="button" className="btn btn-primary w-75 my-3 login-button" onClick={goToLoginPage}>

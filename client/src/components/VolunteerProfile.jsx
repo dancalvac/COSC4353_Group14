@@ -64,7 +64,7 @@ function VolunteerProfile(){
     }, []);
 
     return (
-        <div className="d-flex justify-content-start align-items-center vh-100 background-color"> {/*White background*/}
+        <div className="d-flex justify-content-start align-items-center vh-100 background-color-profile"> {/*White background*/}
             <div className="side-bar d-flex justify-content-center vh-100 align-items-center"> {/*Gray side bar*/}
                 <div className="invisible-box-in-side-bar d-flex flex-column justify-content-between"> {/*Invis box*/}
                     <div className="d-flex flex-column w-100 overflow-hidden"> {/*Navigation buttons*/}
