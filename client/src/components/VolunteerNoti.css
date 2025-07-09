@@ -11,50 +11,39 @@
     font-family: Arial, sans-serif;
 }
 
-/* Sidebar Navigation font-size*/
+/* Sidebar Navigation */
 .vn-sidebar {
     width: 200px;
-    background-color: #d3d3d3;
-    padding: 20px 0;
+    background: #ededed;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    gap: 0;
+}
+
+.vn-sidebar-links {
+    margin-top: 30px;
 }
 
 .vn-sidebar-item {
-    padding: 15px 20px;
-    background: none;
-    border: none;
-    text-align: left;
+    padding: 16px 10px;
+    font-size: 1.1rem;
     cursor: pointer;
-    font-size: 25px;
-    color: #333;
-    transition: background-color 0.3s ease;
-}
-
-.vn-sidebar-item:hover {
-    background-color: #c0c0c0;
 }
 
 .vn-sidebar-item.active {
-    background-color: #b0b0b0;
     font-weight: bold;
 }
 
 .vn-logout-button {
-    margin-top: auto;
-    padding: 15px 20px;
-    background-color:hsl(0, 93%, 50%);
-    border: solid black 1px;
-    border-radius: 20px;
-    text-align: left;
+    color: #d32f2f;
+    font-size: 1.2rem;
+    margin: 30px 10px;
     cursor: pointer;
-    font-size: 25px;
-    color: black;
-    transition: background-color 0.3s ease;
-}
-
-.vn-logout-button:hover {
-    background-color: hsl(0, 93%, 40%);
+    background: none;
+    border: none;
+    text-align: center;
 }
 
 /* Main Content Area */

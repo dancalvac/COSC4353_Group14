@@ -64,23 +64,22 @@ function VolunteerProfile(){
     }, []);
 
     return (
-        <div className="d-flex justify-content-start align-items-center vh-100 background-color-profile"> {/*White background*/}
-            <div className="side-bar d-flex justify-content-center vh-100 align-items-center"> {/*Gray side bar*/}
-                <div className="invisible-box-in-side-bar d-flex flex-column justify-content-between"> {/*Invis box*/}
-                    <div className="d-flex flex-column w-100 overflow-hidden"> {/*Navigation buttons*/}
-                        <button type="button" className="side-bar-navigation-buttons active" onClick={navigateToProfile}>
-                            <div className="side-bar-navigation-button-text">Profile</div>
-                        </button>
-                        <button type="button" className="side-bar-navigation-buttons" onClick={navigateToVolunteerHistory}>
-                            <div className="side-bar-navigation-button-text">Volunteer History</div>
-                        </button>
-                        <button type="button" className="side-bar-navigation-buttons" onClick={navigateToNotifications}>
-                            <div className="side-bar-navigation-button-text">Notifications</div>
-                        </button>
+        <div className="vp-volunteer-profile">
+            {/* Sidebar Navigation */}
+            <div className="vp-sidebar">
+                <div className="vp-sidebar-links">
+                    <div className="vp-sidebar-item active" onClick={navigateToProfile}>
+                        Profile
                     </div>
-                    <button type="button" className="side-bar-navigation-buttons overflow-hidden" onClick={logOut}> {/*Log out button*/}
-                        <div className="log-out-button-text">Log Out</div>
-                    </button>
+                    <div className="vp-sidebar-item" onClick={navigateToVolunteerHistory}>
+                        Volunteer History
+                    </div>
+                    <div className="vp-sidebar-item" onClick={navigateToNotifications}>
+                        Notifications
+                    </div>
+                </div>
+                <div className="vp-logout-button" onClick={logOut}>
+                    Log Out
                 </div>
             </div>
             <div className="d-flex w-100 h-100 justify-content-center align-items-center"> {/*The rest of the page*/}

@@ -37,18 +37,20 @@ function VolunteerHistory() {
         <div className="vh-volunteer-history">
             {/* Sidebar Navigation */}
             <div className="vh-sidebar">
-                <button className="vh-sidebar-item" onClick={handleProfile}>
-                    Profile
-                </button>
-                <button className="vh-sidebar-item active">
-                    Volunteer History
-                </button>
-                <button className="vh-sidebar-item" onClick={handleNotifications}>
-                    Notifications
-                </button>
-                <button className="vh-logout-button" onClick={handleLogout}>
-                    Log Out
-                </button>
+                <div className="vh-sidebar-links">
+                    <div className="vh-sidebar-item" onClick={handleProfile}>
+                        Profile
+                    </div>
+                    <div className="vh-sidebar-item active">
+                        Volunteer History
+                    </div>
+                    <div className="vh-sidebar-item" onClick={handleNotifications}>
+                        Notifications
+                    </div>
+                </div>
+                <div className="vh-logout-button" onClick={handleLogout}>
+                        Log Out
+                </div>
             </div>
 
             {/* Main Content */}
