@@ -12,6 +12,7 @@ import EventManagement from './components/EventManagement';
 import EventCreate from './components/EventCreate';
 import EventEdit from './components/EventEdit';
 import AdminMatching from './components/AdminMatching'; 
+import Testing from './components/Testing'; // Importing the Testing component
 
 function App() {
   
@@ -31,6 +32,7 @@ function App() {
         <Route path="/eventCreate" element={<EventCreate />} />
         <Route path="/eventEdit" element={<EventEdit />} />
         <Route path="/adminMatching" element={<AdminMatching />} />
+        <Route path="/test" element={<Testing/>} />
         {/* Add more routes as needed */}
         <Route path="*" element={<Navigate to="/home" />} /> {/* Redirects any unknown routes to home page */}
       </Routes>

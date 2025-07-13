@@ -1,18 +1,49 @@
 import {useState, useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
+import axios from 'axios';
 import './Login.css'
 
 function Login(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const handleLogin = (e) => {
-        // Validate and Navigate to voluntee/admin page
+    const handleLogin = async (e) => {
         e.preventDefault();
-        console.log({email, password});
-        {/*Do Validation here*/}
-        {/* Once the admin/volunteer pages are done fill this in*/}
-        
+        setLoading(true);
+        setError('');
+
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/login`, {
+                email,
+                password
+            });
+
+            const userData = response.data;
+            console.log('Login successful:', userData);
+            
+            // Store user data in localStorage (or use context/state management)
+            localStorage.setItem('user', JSON.stringify(userData.user));
+            
+            // Navigate based on user role
+            if (userData.user.role === 'admin') {
+                navigate('/eventManagement'); // Create this route
+            } else {
+                navigate('/volunteerProfile'); // Create this route
+            }
+            
+        } catch (error) {
+            console.error('Login error:', error);
+            if (error.response) {
+                setError(error.response.data.error || 'Login failed');
+            } else {
+                setError('Network error. Please try again.');
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -27,35 +58,49 @@ function Login(){
                         <h1>Log In</h1>
                     </div>
 
-                    <div className="my-3 w-100"> {/*email input*/}
+                    {error && (
+                        <div className="alert alert-danger w-100" role="alert">
+                            {error}
+                        </div>
+                    )}
+
+                    <div className="my-3 w-100">
                         <label htmlFor="emailInput" className="form-label">Email:</label>
                         <input
-                        type="email"
-                        className="form-control border border-black border-2"
-                        id="emailInput"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
+                            type="email"
+                            className="form-control border border-black border-2"
+                            id="emailInput"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            disabled={loading}
                         />
                     </div>
 
-                    <div className="my-3 w-100"> {/*password input*/}
+                    <div className="my-3 w-100">
                         <label htmlFor="passwordInput" className="form-label">Password:</label>
                         <input
-                        type="password"
-                        className="form-control border border-black border-2"
-                        id="passwordInput"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
+                            type="password"
+                            className="form-control border border-black border-2"
+                            id="passwordInput"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            disabled={loading}
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-primary w-100 my-3 login-button"> {/*log in button*/}
-                        Log In
+                    <button type="submit" className="btn btn-primary w-100 my-3 login-button" disabled={loading}>
+                        {loading ? 'Logging in...' : 'Log In'}
                     </button>
 
                     <p>Don’t have an account? <Link to="/register" className="register-link">Create an account</Link></p> {/*create an account button*/}
+                    {/* Demo credentials info */}
+                    <div className="mt-3 small text-muted">
+                        <p><strong>Demo Credentials:</strong></p>
+                        <p>Admin: admin@example.com / admin123</p>
+                        <p>Volunteer: volunteer@example.com / volunteer123</p>
+                    </div>
                 </form>
             </div>
         </div>
