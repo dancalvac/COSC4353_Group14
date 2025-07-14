@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from routes.auth import auth_bp
 from routes.test import test_bp
+from routes.profile import profile_bp
 
 def create_app():
     app = Flask(__name__)
@@ -10,6 +11,7 @@ def create_app():
     # Register blueprints (similar to importing routes in Node.js)
     app.register_blueprint(auth_bp)
     app.register_blueprint(test_bp)
+    app.register_blueprint(profile_bp)
     
     return app
 

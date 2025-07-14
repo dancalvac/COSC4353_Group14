@@ -2,9 +2,12 @@ import React from "react";
 import Select from 'react-select';
 import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
 import './VolunteerProfile.css';
 
 function VolunteerProfile(){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [addressOne, setAddressOne] = useState('');
     const [addressTwo, setAddressTwo] = useState('');
@@ -13,15 +16,56 @@ function VolunteerProfile(){
     const [state, setState] = useState('');
     const [zipcode, setZipcode] = useState('');
     const [skills, setSkills] = useState([]);
-    const [date, setDate] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    //const [date, setDate] = useState('');
     const navigate = useNavigate();
-
+    const [availability, setAvailability] = useState({
+        monday: { start: '', end: '' },
+        tuesday: { start: '', end: '' },
+        wednesday: { start: '', end: '' },
+        thursday: { start: '', end: '' },
+        friday: { start: '', end: '' },
+        saturday: { start: '', end: '' },
+        sunday: { start: '', end: '' }
+    });
+    
+    // Helper function to handle time changes
+    const handleTimeChange = (day, timeType, value) => {
+        setAvailability(prev => ({
+            ...prev,
+            [day]: {
+                ...prev[day],
+                [timeType]: value
+            }
+        }));
+    };
+    
+    // Helper function to generate time options in 15-minute increments
+    const generateTimeOptions = () => {
+        const times = [];
+        for (let hour = 5; hour <= 22; hour++) {
+            for (let minute = 0; minute < 60; minute += 15) {
+                const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                times.push(timeString);
+            }
+        }
+        times.pop();
+        times.pop();
+        times.pop();
+        return times;
+    };
+    
+    const timeOptions = generateTimeOptions();
     const options = [
         { value: 'compassion', label: 'Compassion' },
         { value: 'creativity', label: 'Creativity' },
         { value: 'nimbleHands', label: 'Nimble Hands' },
         // add more if necessary
     ];
+
+    
+
 
     const navigateToProfile = (e) => {
         // Navigate to Profile
@@ -44,12 +88,36 @@ function VolunteerProfile(){
         navigate('/volunteerNotifications');
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         // Validate and save data to the database
         e.preventDefault();
-        console.log("Saving user profile");
-        console.log({fullName, addressOne, addressTwo, preferences, city, state, zipcode, skills, date});
-        //Do Validation here
+        setLoading(true);
+        setError('');
+        console.log(fullName, addressOne, addressTwo, preferences, city, state, zipcode, skills);
+        try{
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/volunteer/profile`, {
+                email,
+                fullName,
+                password,
+                addressOne,
+                addressTwo,
+                city,
+                state,
+                zipcode,
+                preferences
+            });
+            const userData = response.data;
+            console.log("Saving user profile", userData);
+        } catch (error) {
+            console.error('Saving eror:', error);
+            if (error.response) {
+                setError(error.response.data.error || 'Failed saving');
+            } else {
+                setError('Network error. Please try again.');
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     const logOut = (e) => {
@@ -125,7 +193,13 @@ function VolunteerProfile(){
                             <div className="row mx-1 my-3"> {/*Email*/}
                                 <div className="col">
                                     <label htmlFor="email">Email</label>
-                                    <input type="email" className="form-control border border-black border-2" value="" id="email" readOnly/> {/*Populate the value once we get the backend and database working*/}
+                                    <input type="email" className="form-control border border-black border-2" id="email" onChange={(e) => setEmail(e.target.value)} required/> {/*Populate the value once we get the backend and database working*/}
+                                </div>
+                            </div>
+                            <div className="row mx-1 my-3"> {/*Password*/}
+                                <div className="col">
+                                    <label htmlFor="password">Password</label>
+                                    <input type="password" className="form-control border border-black border-2" id="passwprd" onChange={(e) => setPassword(e.target.value)} required/> {/*Populate the value once we get the backend and database working*/}
                                 </div>
                             </div>
                             <div className="row mx-1 my-3"> {/*City*/}
@@ -202,12 +276,47 @@ function VolunteerProfile(){
                                     <Select options={options} id="skills" className="border border-black border-2 rounded-2 basic-multi-select" classNamePrefix="select" value={skills} required isMulti onChange={setSkills}/>
                                 </div>
                             </div>
-                            <div className="row mx-1 my-3"> {/*Availability*/}
-                                <div className="col">
-                                    <label htmlFor="datePicker">Availability*</label>
-                                    <input type="date" className="form-control border border-black border-2" id="datePicker" onChange={(e) => setDate(e.target.value)}/>
+                            <div className="row mx-1 my-3">
+                            <div className="col">
+                                <label className="form-label">Weekly Availability*</label>
+                                <div className="availability-grid">
+                                    {Object.entries(availability).map(([day, times]) => (
+                                        <div key={day} className="row mx-1 my-2 align-items-center">
+                                            <div className="col-2">
+                                                <label className="form-label text-capitalize">{day}:</label>
+                                            </div>
+                                            <div className="col-4">
+                                                <select 
+                                                    className="form-select border border-black border-2" 
+                                                    value={times.start}
+                                                    onChange={(e) => handleTimeChange(day, 'start', e.target.value)}
+                                                >
+                                                    <option value="">Start Time</option>
+                                                    {timeOptions.map(time => (
+                                                        <option key={time} value={time}>{time}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="col-1 text-center">
+                                                <span>-</span>
+                                            </div>
+                                            <div className="col-4">
+                                                <select 
+                                                    className="form-select border border-black border-2" 
+                                                    value={times.end}
+                                                    onChange={(e) => handleTimeChange(day, 'end', e.target.value)}
+                                                >
+                                                    <option value="">End Time</option>
+                                                    {timeOptions.map(time => (
+                                                        <option key={time} value={time}>{time}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
+                        </div>
                         </div>
                         
                     </div>
