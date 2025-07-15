@@ -3,6 +3,7 @@ from flask_cors import CORS
 from routes.auth import auth_bp
 from routes.test import test_bp
 from routes.profile import profile_bp
+from routes.notifications import notifications_bp
 
 def create_app():
     app = Flask(__name__)
@@ -12,6 +13,7 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(test_bp)
     app.register_blueprint(profile_bp)
+    app.register_blueprint(notifications_bp)
     
     return app
 
