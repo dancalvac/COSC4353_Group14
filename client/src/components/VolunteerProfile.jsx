@@ -18,7 +18,6 @@ function VolunteerProfile(){
     const [skills, setSkills] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    //const [date, setDate] = useState('');
     const navigate = useNavigate();
     const [availability, setAvailability] = useState({
         monday: { start: '', end: '' },
@@ -30,6 +29,7 @@ function VolunteerProfile(){
         sunday: { start: '', end: '' }
     });
     
+
     // Helper function to handle time changes
     const handleTimeChange = (day, timeType, value) => {
         setAvailability(prev => ({
@@ -61,10 +61,17 @@ function VolunteerProfile(){
         { value: 'compassion', label: 'Compassion' },
         { value: 'creativity', label: 'Creativity' },
         { value: 'nimbleHands', label: 'Nimble Hands' },
+        { value: 'leadership', label: 'Leadership' },
+        { value: 'communication', label: 'Communication' },
+        { value: 'technical', label: 'Technical Skills' }
         // add more if necessary
     ];
 
-    
+    const handleSkillChange = (selectedOptions) => {
+        if (selectedOptions.length <= 3) {
+            setSkills(selectedOptions);
+        } 
+    };
 
 
     const navigateToProfile = (e) => {
@@ -93,7 +100,25 @@ function VolunteerProfile(){
         e.preventDefault();
         setLoading(true);
         setError('');
-        console.log(fullName, addressOne, addressTwo, preferences, city, state, zipcode, skills);
+        console.log(fullName, addressOne, addressTwo, preferences, city, state, zipcode, skills[0]);
+        console.log(availability.monday.start);
+        const monday_start = availability.monday.start
+        const monday_end = availability.monday.end
+        const tuesday_start = availability.tuesday.start
+        const tuesday_end = availability.tuesday.end
+        const wednesday_start = availability.wednesday.start
+        const wednesday_end = availability.wednesday.end
+        const thursday_start = availability.thursday.start
+        const thursday_end = availability.thursday.end
+        const friday_start = availability.friday.start
+        const friday_end = availability.friday.end
+        const saturday_start = availability.saturday.start
+        const saturday_end = availability.saturday.end
+        const sunday_start = availability.sunday.start
+        const sunday_end = availability.sunday.end
+        const skill1 = skills[0]
+        const skill2 = skills[1]
+        const skill3 = skills[2]
         try{
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/volunteer/profile`, {
                 email,
@@ -104,7 +129,24 @@ function VolunteerProfile(){
                 city,
                 state,
                 zipcode,
-                preferences
+                preferences,
+                monday_start,
+                monday_end,
+                tuesday_start,
+                tuesday_end,
+                wednesday_start,
+                wednesday_end,
+                thursday_start,
+                thursday_end,
+                friday_start,
+                friday_end,
+                saturday_start,
+                saturday_end,
+                sunday_start,
+                sunday_end,
+                skill1,
+                skill2,
+                skill3
             });
             const userData = response.data;
             console.log("Saving user profile", userData);
@@ -272,8 +314,8 @@ function VolunteerProfile(){
                             </div>
                             <div className="row mx-1 my-3"> {/*Skills*/}
                                 <div className="col">
-                                    <label htmlFor="skills">Skills*</label>
-                                    <Select options={options} id="skills" className="border border-black border-2 rounded-2 basic-multi-select" classNamePrefix="select" value={skills} required isMulti onChange={setSkills}/>
+                                    <label htmlFor="skills">Top 3 Skills*</label>
+                                    <Select options={options} id="skills" className="border border-black border-2 rounded-2 basic-multi-select" classNamePrefix="select" value={skills} required isMulti onChange={handleSkillChange}/>
                                 </div>
                             </div>
                             <div className="row mx-1 my-3">
