@@ -19,6 +19,8 @@ def send_email_notifications():
 
         if not emails or not event:
             return jsonify({"error": "Missing emails or event_name"}), 400
+        elif not isinstance(emails, list):
+            return jsonify({"error": "Email field must be a list"}), 400
 
         url = "https://api.onesignal.com/notifications?c=email"
         headers = {
@@ -35,7 +37,7 @@ def send_email_notifications():
         }
         try:
             response = requests.post(url, json=payload, headers=headers)
-            return jsonify({"status": "Notification sent", "details": response.json()})
+            return jsonify({"status": "Notification sent", "details": response.json()}), 200
         except requests.exceptions.RequestException as e:
             return jsonify({"error": "Failed to send notification", "details": str(e)}), 500
     except Exception as e:

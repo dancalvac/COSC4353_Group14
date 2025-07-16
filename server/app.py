@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_cors import CORS
-from routes.auth import auth_bp
-from routes.test import test_bp
-from routes.profile import profile_bp
-from routes.notifications import notifications_bp
-from routes.matching import matching_bp
+from server.routes.auth import auth_bp
+from server.routes.test import test_bp
+from server.routes.profile import profile_bp
+from server.routes.notifications import notifications_bp
+from server.routes.matching import matching_bp
 
 def create_app():
     app = Flask(__name__)
