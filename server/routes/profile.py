@@ -29,7 +29,7 @@ HARDCODED_VOLUNTEER_PROFILE = {
 }
 
 @profile_bp.route('/volunteer/profile', methods=['POST'])
-def get_profile():
+def save_profile():
     try:
         data = request.get_json()
         email = data.get('email')
@@ -91,8 +91,11 @@ def get_profile():
                 'email': email,
                 'monday_start': monday_start,
                 'monday_end': monday_end,
-                'skill3': skill3
+                'skill3': skill3,
+                'preferences': preferences
             }
         }), 201
     except Exception as e:
+        print(f"Error saving profile: {str(e)}")
         return jsonify({'error': 'Server error'}), 500
+

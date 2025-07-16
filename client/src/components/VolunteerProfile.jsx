@@ -18,6 +18,7 @@ function VolunteerProfile(){
     const [skills, setSkills] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
     const [availability, setAvailability] = useState({
         monday: { start: '', end: '' },
@@ -95,12 +96,29 @@ function VolunteerProfile(){
         navigate('/volunteerNotifications');
     };
 
+    const validateForm = () => {
+        if (!fullName || !addressOne || !city || !state || !zipcode || !email || !password) {
+            setError('Please fill in all required fields');
+            return false;
+        }
+        if (skills.length === 0) {
+            setError('Please select at least one skill');
+            return false;
+        }
+        return true;
+    };
     const handleSubmit = async (e) => {
         // Validate and save data to the database
         e.preventDefault();
+    
+        if (!validateForm()) {
+            return;
+        }
+
         setLoading(true);
         setError('');
-        console.log(fullName, addressOne, addressTwo, preferences, city, state, zipcode, skills[0]);
+        setSuccessMessage('');
+        console.log(fullName, addressOne, addressTwo, preferences, city, state, zipcode, skills[0].value);
         console.log(availability.monday.start);
         const monday_start = availability.monday.start
         const monday_end = availability.monday.end
@@ -116,9 +134,9 @@ function VolunteerProfile(){
         const saturday_end = availability.saturday.end
         const sunday_start = availability.sunday.start
         const sunday_end = availability.sunday.end
-        const skill1 = skills[0]
-        const skill2 = skills[1]
-        const skill3 = skills[2]
+        const skill1 = skills[0]?.value || null
+        const skill2 = skills[1]?.value || null  
+        const skill3 = skills[2]?.value || null
         try{
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/volunteer/profile`, {
                 email,
@@ -148,14 +166,19 @@ function VolunteerProfile(){
                 skill2,
                 skill3
             });
-            const userData = response.data;
-            console.log("Saving user profile", userData);
+            setSuccessMessage('Profile saved successfully!');
+            console.log("Profile saved:", response.data);
+            
         } catch (error) {
-            console.error('Saving eror:', error);
-            if (error.response) {
-                setError(error.response.data.error || 'Failed saving');
+            console.error('Save error:', error);
+            if (error.response?.status === 400) {
+                setError('Please check your input and try again.');
+            } else if (error.response?.status === 500) {
+                setError('Server error. Please try again later.');
+            } else if (error.request) {
+                setError('Network error. Please check your connection.');
             } else {
-                setError('Network error. Please try again.');
+                setError('An unexpected error occurred. Please try again.');
             }
         } finally {
             setLoading(false);
@@ -169,8 +192,15 @@ function VolunteerProfile(){
         navigate('/home');
     };
 
+    // Clear messages when user starts typing
+    const handleInputChange = (setter) => (e) => {
+        if (error) setError('');
+        if (successMessage) setSuccessMessage('');
+        setter(e.target.value);
+    };
+
     useEffect(() => {
-        document.title = "Register";
+        document.title = "Volunteer Profile";
     }, []);
 
     return (
@@ -198,36 +228,74 @@ function VolunteerProfile(){
                         <div className="w-50 welcome-text"> {/*Welcome Text*/}
                             Welcome!
                         </div>
-                        <button type="submit" className="btn btn-primary w-25" > {/*Save button*/}
-                            Save
+                        <button 
+                            type="submit" 
+                            className="btn btn-primary w-25" 
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <>
+                                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                    Saving...
+                                </>
+                            ) : (
+                                'Save'
+                            )}
                         </button>
                     </div>
+                    {/* Error/Success Messages */}
+                    {error && (
+                        <div className="alert alert-danger mx-3 mt-3" role="alert">
+                            <strong>Error:</strong> {error}
+                        </div>
+                    )}
+                    {successMessage && (
+                        <div className="alert alert-success mx-3 mt-3" role="alert">
+                            <strong>Success:</strong> {successMessage}
+                        </div>
+                    )}
+
                     <div className="main-content-div-body d-flex flex-row flex-grow-1"> {/*Body*/}
                         <div className="flex-grow-1 w-50 d-flex flex-column"> {/*Left Half*/}
                             <div className="row mx-1 my-3"> {/*First Name and Last Name*/}
                                 <div className="col">
                                     <label htmlFor="fullName">Full name*</label>
-                                    <input type="text" className="form-control border border-black border-2" id="fullName" onChange={(e) => setFullName(e.target.value)} required/>
+                                    <input type="text" className="form-control border border-black border-2" id="fullName" value={fullName}
+                                        onChange={handleInputChange(setFullName)} required disabled={loading}/>
                                 </div>
                             </div>
                             <div className="row mx-1 my-3"> {/*Address 1*/}
                                 <div className="col">
                                     <label htmlFor="addressOne">Address 1*</label>
-                                    <input type="text" className="form-control border border-black border-2" id="addressOne" onChange={(e) => setAddressOne(e.target.value)} required/>
+                                    <input type="text" className="form-control border border-black border-2" id="addressOne" 
+                                        value={addressOne}
+                                        onChange={handleInputChange(setAddressOne)}  required disabled={loading}/>
                                 </div>
                             </div>
                             <div className="row mx-1 my-3"> {/*Address 2*/}
                                 <div className="col">
                                     <label htmlFor="addressTwo">Address 2</label>
-                                    <input type="text" className="form-control border border-black border-2" id="addressTwo" onChange={(e) => setAddressTwo(e.target.value)}/>
+                                    <input 
+                                        type="text" 
+                                        className="form-control border border-black border-2" 
+                                        id="addressTwo" 
+                                        value={addressTwo}
+                                        onChange={handleInputChange(setAddressTwo)}
+                                        disabled={loading}
+                                    />
                                 </div>
                             </div>
                             <div className="row mx-1 my-3 flex-grow-1"> {/* Preferences */}
                                 <div className="col d-flex flex-column h-100">
                                     <label htmlFor="preferences">Preferences</label>
-                                    <textarea className="form-control border border-black border-2 flex-grow-1" id="preferences" onChange={(e) => setPreferences(e.target.value)} style={{resize: "none"}}>
-
-                                    </textarea>
+                                    <textarea 
+                                        className="form-control border border-black border-2 flex-grow-1" 
+                                        id="preferences" 
+                                        value={preferences}
+                                        onChange={handleInputChange(setPreferences)} 
+                                        style={{resize: "none"}}
+                                        disabled={loading}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -235,25 +303,60 @@ function VolunteerProfile(){
                             <div className="row mx-1 my-3"> {/*Email*/}
                                 <div className="col">
                                     <label htmlFor="email">Email</label>
-                                    <input type="email" className="form-control border border-black border-2" id="email" onChange={(e) => setEmail(e.target.value)} required/> {/*Populate the value once we get the backend and database working*/}
+                                    <input 
+                                        type="email" 
+                                        className="form-control border border-black border-2" 
+                                        id="email" 
+                                        value={email}
+                                        onChange={handleInputChange(setEmail)} 
+                                        required
+                                        disabled={loading}
+                                    />
                                 </div>
                             </div>
                             <div className="row mx-1 my-3"> {/*Password*/}
                                 <div className="col">
                                     <label htmlFor="password">Password</label>
-                                    <input type="password" className="form-control border border-black border-2" id="passwprd" onChange={(e) => setPassword(e.target.value)} required/> {/*Populate the value once we get the backend and database working*/}
+                                    <input 
+                                        type="password" 
+                                        className="form-control border border-black border-2" 
+                                        id="password" 
+                                        value={password}
+                                        onChange={handleInputChange(setPassword)} 
+                                        required
+                                        disabled={loading}
+                                    />
                                 </div>
                             </div>
                             <div className="row mx-1 my-3"> {/*City*/}
                                 <div className="col">
                                     <label htmlFor="addressTwo">City*</label>
-                                    <input type="text" className="form-control border border-black border-2" id="addressTwo" onChange={(e) => setCity(e.target.value)}/>
+                                    <input 
+                                        type="text" 
+                                        className="form-control border border-black border-2" 
+                                        id="city" 
+                                        value={city}
+                                        onChange={handleInputChange(setCity)}
+                                        required
+                                        disabled={loading}
+                                    />
                                 </div>
                             </div>
                             <div className="row mx-1 my-3"> {/*State and Zipcode*/}
                                 <div className="col dropdown">
                                     <label htmlFor="state">State*</label>
-                                    <select id="state" className="form-select border border-black border-2" value={state} onChange={(e) => setState(e.target.value)} required>
+                                    <select 
+                                        id="state" 
+                                        className="form-select border border-black border-2" 
+                                        value={state} 
+                                        onChange={(e) => {
+                                            if (error) setError('');
+                                            if (successMessage) setSuccessMessage('');
+                                            setState(e.target.value);
+                                        }} 
+                                        required
+                                        disabled={loading}
+                                    >
                                         <option value="" hidden></option>
                                         <option value="AL">Alabama</option>
                                         <option value="AK">Alaska</option>
@@ -309,13 +412,35 @@ function VolunteerProfile(){
                                 </div>
                                 <div className="col">
                                     <label htmlFor="zipcode">Zipcode*</label>
-                                    <input type="text" className="form-control border border-black border-2" id="zipcode" onChange={(e) => setZipcode(e.target.value)} required/>
+                                    <input 
+                                        type="text" 
+                                        className="form-control border border-black border-2" 
+                                        id="zipcode" 
+                                        value={zipcode}
+                                        onChange={handleInputChange(setZipcode)} 
+                                        required
+                                        disabled={loading}
+                                    />
                                 </div>
                             </div>
                             <div className="row mx-1 my-3"> {/*Skills*/}
                                 <div className="col">
                                     <label htmlFor="skills">Top 3 Skills*</label>
-                                    <Select options={options} id="skills" className="border border-black border-2 rounded-2 basic-multi-select" classNamePrefix="select" value={skills} required isMulti onChange={handleSkillChange}/>
+                                    <Select 
+                                        options={options} 
+                                        id="skills" 
+                                        className="border border-black border-2 rounded-2 basic-multi-select" 
+                                        classNamePrefix="select" 
+                                        value={skills} 
+                                        required 
+                                        isMulti 
+                                        onChange={(selectedOptions) => {
+                                            if (error) setError('');
+                                            if (successMessage) setSuccessMessage('');
+                                            handleSkillChange(selectedOptions);
+                                        }}
+                                        isDisabled={loading}
+                                    />
                                 </div>
                             </div>
                             <div className="row mx-1 my-3">
@@ -331,7 +456,12 @@ function VolunteerProfile(){
                                                 <select 
                                                     className="form-select border border-black border-2" 
                                                     value={times.start}
-                                                    onChange={(e) => handleTimeChange(day, 'start', e.target.value)}
+                                                    onChange={(e) => {
+                                                        if (error) setError('');
+                                                        if (successMessage) setSuccessMessage('');
+                                                        handleTimeChange(day, 'start', e.target.value);
+                                                    }}
+                                                    disabled={loading}
                                                 >
                                                     <option value="">Start Time</option>
                                                     {timeOptions.map(time => (
@@ -346,7 +476,12 @@ function VolunteerProfile(){
                                                 <select 
                                                     className="form-select border border-black border-2" 
                                                     value={times.end}
-                                                    onChange={(e) => handleTimeChange(day, 'end', e.target.value)}
+                                                    onChange={(e) => {
+                                                        if (error) setError('');
+                                                        if (successMessage) setSuccessMessage('');
+                                                        handleTimeChange(day, 'end', e.target.value);
+                                                    }}
+                                                    disabled={loading}
                                                 >
                                                     <option value="">End Time</option>
                                                     {timeOptions.map(time => (
