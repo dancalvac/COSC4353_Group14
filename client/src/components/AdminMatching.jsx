@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './AdminMatching.css';
 
 function AdminMatching() {
@@ -13,7 +14,8 @@ function AdminMatching() {
             { id: 1, name: "Charity Smith", skills: "First Aid, ASL" },
             { id: 2, name: "Henry Nguyen",   skills: "Logistics, Driving" },
             { id: 3, name: "Max Gibson",    skills: "Photography, Bilingual" },
-            { id: 4, name: "Daniel Calvac", skills: "Dogsitter, Carpenter"} 
+            { id: 4, name: "Daniel Calvac", skills: "Dogsitter, Carpenter"} ,
+            { id: 5, name: "Test User", skills: "Programmer", email: "cosc4353group14@grr.la"}
         ];
         const sampleEvents = [
             { id: 1, name: "Community Cleanup", date: "07-15-2025" },
@@ -35,9 +37,27 @@ function AdminMatching() {
         navigate('/');
     };
 
-    const handleMatch = (volunteerId, eventId) => {
+    const handleMatch = async (volunteerId, eventId) => {
         console.log(`Match volunteer ${volunteerId} → event ${eventId}`);
-        setVolunteers(v => v.filter(x => x.id !== volunteerId));
+
+        // Find the matched volunteer and event objects
+        const volunteer = volunteers.find(v => v.id === volunteerId);
+        const event = events.find(e => e.id === eventId);
+
+        try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/send_notification`, {
+            emails: [volunteer.email],
+            event: event.name
+        });
+
+        console.log("Notification sent:", response.data);
+
+        // Remove matched volunteer from list
+        setVolunteers(prev => prev.filter(v => v.id !== volunteerId));
+        }   
+        catch (err) {
+            console.error("Failed to send notification:", err);
+        }
     };
 
     return (
