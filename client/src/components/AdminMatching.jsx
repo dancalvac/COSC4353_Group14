@@ -9,22 +9,17 @@ function AdminMatching() {
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
-        /* Some hard coded volunteer names and events for now */
-        const sampleVolunteers = [
-            { id: 1, name: "Charity Smith", skills: "First Aid, ASL" },
-            { id: 2, name: "Henry Nguyen",   skills: "Logistics, Driving" },
-            { id: 3, name: "Max Gibson",    skills: "Photography, Bilingual" },
-            { id: 4, name: "Daniel Calvac", skills: "Dogsitter, Carpenter"} ,
-            { id: 5, name: "Test User", skills: "Programmer", email: "cosc4353group14@grr.la"}
-        ];
-        const sampleEvents = [
-            { id: 1, name: "Community Cleanup", date: "07-15-2025" },
-            { id: 2, name: "Fundraising Gala",  date: "08-01-2025" },
-            { id: 3, name: "Food Drive", date: "09-10-2025" },
-            { id: 4, name: "Puppy Pickup", date: "10-17-2025"}
-        ];
-        setVolunteers(sampleVolunteers);
-        setEvents(sampleEvents);
+        const fetch_user_and_event = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/matching`);
+                setVolunteers(response.data.volunteers);
+                setEvents(response.data.events);
+            }
+            catch (error) {
+                console.error('Failed to fetch users and events:', error);
+            }
+        }
+        fetch_user_and_event();
     }, []);
 
     const handleEvents = () => {
@@ -45,15 +40,15 @@ function AdminMatching() {
         const event = events.find(e => e.id === eventId);
 
         try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/send_notification`, {
-            emails: [volunteer.email],
-            event: event.name
-        });
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/send_notification`, {
+                emails: [volunteer.email],
+                event: event.name
+            });
 
-        console.log("Notification sent:", response.data);
+            console.log("Notification sent:", response.data);
 
-        // Remove matched volunteer from list
-        setVolunteers(prev => prev.filter(v => v.id !== volunteerId));
+            // Remove matched volunteer from list
+            setVolunteers(prev => prev.filter(v => v.id !== volunteerId));
         }   
         catch (err) {
             console.error("Failed to send notification:", err);
