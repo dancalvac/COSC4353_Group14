@@ -134,9 +134,9 @@ function VolunteerProfile(){
         const saturday_end = availability.saturday.end
         const sunday_start = availability.sunday.start
         const sunday_end = availability.sunday.end
-        const skill1 = skills[0]?.value || null
-        const skill2 = skills[1]?.value || null  
-        const skill3 = skills[2]?.value || null
+        const skill1 = skills[0]?.value || ''
+        const skill2 = skills[1]?.value || ''  
+        const skill3 = skills[2]?.value || ''
         try{
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/volunteer/profile`, {
                 email,

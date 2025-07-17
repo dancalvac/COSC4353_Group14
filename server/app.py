@@ -1,10 +1,11 @@
 from flask import Flask
 from flask_cors import CORS
-from server.routes.auth import auth_bp
-from server.routes.test import test_bp
-from server.routes.profile import profile_bp
-from server.routes.notifications import notifications_bp
-from server.routes.matching import matching_bp
+from routes.auth import auth_bp
+from routes.test import test_bp
+from routes.profile import profile_bp
+from routes.notifications import notifications_bp
+from routes.matching import matching_bp
+from routes.events import events_bp
 
 def create_app():
     app = Flask(__name__)
@@ -16,6 +17,7 @@ def create_app():
     app.register_blueprint(profile_bp)
     app.register_blueprint(notifications_bp)
     app.register_blueprint(matching_bp)
+    app.register_blueprint(events_bp)
     
     return app
 
