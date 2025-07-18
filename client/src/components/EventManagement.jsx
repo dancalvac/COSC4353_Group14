@@ -20,7 +20,7 @@ function EventManagementPage() {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/display/events`);
       setEvents(response.data.Events || []); // or response.data if you didn't wrap in { events: [...] }
-      console.log(events);
+      console.log('Fetched events:', response.data.Events);
     } catch (error) {
       console.error('Fetch error:', error);
       setError('Failed to load events. Please try again.');
@@ -65,7 +65,9 @@ function EventManagementPage() {
                 
         {loading && <p>Loading events...</p>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
-
+        {events.length === 0 && !loading && !error && (
+          <p>No events found. Create your first event!</p>
+        )}
         <ul>
           {events.map((event, idx) => (
             <li key={idx}>
