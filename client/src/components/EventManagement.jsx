@@ -4,6 +4,9 @@ import axios from "axios";
 import "./EventManagement.css";
 
 function EventManagementPage() {
+  const [events, setEvents] = useState([]);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
