@@ -2,9 +2,40 @@ from flask import Blueprint, request, jsonify
 
 events_bp = Blueprint('events', __name__)
 
-HARDCODED_EVENTS = {
+# hardcoded events later to be replaced with database calls
+EVENTS = [
+    {
+        "id": 1,
+        "title": "Community Garden Cleanup",
+        "date": "2025-08-15",
+        "location": "Memorial Park",
+        "description": "Help clean up and prepare the community garden for fall planting.",
+        "status": "open",
+        "volunteers_needed": 10,
+        "volunteers_assigned": 3
+    },
+    {
+        "id": 2,
+        "title": "Food Bank Distribution",
+        "date": "2025-08-20",
+        "location": "Downtown Food Bank",
+        "description": "Assist with sorting and distributing food to families in need.",
+        "status": "open",
+        "volunteers_needed": 15,
+        "volunteers_assigned": 7
+    },
+]
 
-}
+@events_bp.route('/events', methods=['GET'])
+def get_events():
+    return jsonify({"events": EVENTS})
+
+@events_bp.route('/events/<int:event_id>', methods=['GET'])
+def get_event(event_id):
+    event = next((event for event in EVENTS if event["id"] == event_id), None)
+    if event:
+        return jsonify({"event": event})
+    return jsonify({"error": "Event not found"}), 404
 
 @events_bp.route('/create/event', methods=['POST'])
 def create_event():

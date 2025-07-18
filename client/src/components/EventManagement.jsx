@@ -1,25 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./EventManagement.css";
 
 function EventManagementPage() {
   const navigate = useNavigate();
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Sample event data (static, like VolunteerHistory.jsx)
-  const events = [
-    {
-      name: "",
-      description:
-        "",
-      location: "",
-    },
-    {
-      name: "Beach Cleanup by the harbor",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-      location: "837 Test Boulevard, Austin, TX",
-    },
-  ];
+  useEffect(() => {
+    // Fetch events from backend when component mounts
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get("http://localhost:5000/events");
+        setEvents(response.data.events);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to fetch events");
+        setLoading(false);
+        console.error("Error fetching events:", err);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const handleLogout = () => {
     navigate("/");
@@ -31,14 +37,22 @@ function EventManagementPage() {
 
   const handleNavToVolMatching = () => {
     navigate("/adminMatching");
-  }
+  };
+
+  if (loading) return <div>Loading events...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="emp-container">
       <div className="emp-sidebar">
         <div className="emp-sidebar-links">
           <div className="emp-sidebar-link active">Events</div>
-          <div className="emp-sidebar-link" onClick={handleNavToVolMatching}>Volunteer Matching</div>
+          <div
+            className="emp-sidebar-link"
+            onClick={handleNavToVolMatching}
+          >
+            Volunteer Matching
+          </div>
         </div>
         <div className="emp-logout" onClick={handleLogout}>
           Log Out
@@ -46,67 +60,67 @@ function EventManagementPage() {
       </div>
       <div className="emp-main">
         <div className="emp-title-row">
-        <h1 className="emp-title">Events</h1>
-        <button className="emp-create-btn" onClick={handleCreateEvent}>
-        Create an event
-        </button>
-    </div>
-        {/* Hardcoded event cards */}
-        <div className="emp-event-card">
-          <div className="emp-event-fields">
-            <div>
-              <label>Event Name</label>
-              <input className="emp-input" value={events[0].name} readOnly />
-            </div>
-            <div>
-              <label>Event Description</label>
-              <textarea
-                className="emp-input emp-desc-input"
-                value={events[0].description}
-                readOnly
-              />
-            </div>
-            <div>
-              <label>Location</label>
-              <input className="emp-input" value={events[0].location} readOnly />
-            </div>
-          </div>
-          <div className="emp-event-actions">
-            <button className="emp-edit-btn" disabled>
-              Edit
-            </button>
-            <button className="emp-delete-btn" disabled>
-              Delete
-            </button>
-          </div>
+          <h1 className="emp-title">Events</h1>
+          <button className="emp-create-btn" onClick={handleCreateEvent}>
+            Create an event
+          </button>
         </div>
-        <div className="emp-event-card">
-          <div className="emp-event-fields">
-            <div>
-              <label>Event Name</label>
-              <input className="emp-input" value={events[1].name} readOnly />
+        {/* Event cards from state */}
+        <div className="events-list">
+          {events.map((event) => (
+            <div key={event.id} className="emp-event-card">
+              <div className="emp-event-fields">
+                <div>
+                  <label>Event Name</label>
+                  <input
+                    className="emp-input"
+                    value={event.title}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label>Event Description</label>
+                  <textarea
+                    className="emp-input emp-desc-input"
+                    value={event.description}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label>Location</label>
+                  <input
+                    className="emp-input"
+                    value={event.location}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label>Date</label>
+                  <input className="emp-input" value={event.date} readOnly />
+                </div>
+                <div>
+                  <label>Status</label>
+                  <input className="emp-input" value={event.status} readOnly />
+                </div>
+                <div>
+                  <label>Volunteers</label>
+                  <input
+                    className="emp-input"
+                    value={`${event.volunteers_assigned}/${event.volunteers_needed}`}
+                    readOnly
+                  />
+                </div>
+              </div>
+              <div className="emp-event-actions">
+                <button className="emp-edit-btn" disabled>
+                  Edit
+                </button>
+                <button className="emp-delete-btn" disabled>
+                  Delete
+                </button>
+              </div>
             </div>
-            <div>
-              <label>Event Description</label>
-              <textarea
-                className="emp-input emp-desc-input"
-                value={events[1].description}
-                readOnly
-              />
-            </div>
-            <div>
-              <label>Location</label>
-              <input className="emp-input" value={events[1].location} readOnly />
-            </div>
-          </div>
-          <div className="emp-event-actions">
-            <button className="emp-edit-btn" disabled>
-              Edit
-            </button>
-            <button className="emp-delete-btn" disabled>
-              Delete
-            </button>
-          </div>
+          ))}
         </div>
       </div>
     </div>

@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './VolunteerHistory.css';
 
 function VolunteerHistory() {
     const navigate = useNavigate();
+    const [volunteerHistory, setVolunteerHistory] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        // Fetch volunteer history from backend when component mounts
+        const fetchVolunteerHistory = async () => {
+            try {
+                setLoading(true);
+                // You can pass the email as a query parameter or get from context/state
+                const response = await axios.get('http://localhost:5000/volunteer/history');
+                setVolunteerHistory(response.data.volunteer_history);
+                setLoading(false);
+            } catch (err) {
+                setError('Failed to fetch volunteer history');
+                setLoading(false);
+                console.error('Error fetching volunteer history:', err);
+            }
+        };
+        
+        fetchVolunteerHistory();
+    }, []);
 
     const handleProfile = () => {
         console.log("Navigate to profile");
@@ -20,18 +43,8 @@ function VolunteerHistory() {
         navigate('/');
     };
 
-    // Sample volunteer history data
-    const volunteerHistory = [
-        {
-            participationStatus: "Completed",
-            eventName: "Food Bank Fair",
-            location: "1234 Main Street, Houston, TX",
-            requiredSkills: "Teamwork. Communication",
-            urgency: "Medium",
-            eventDate: "February 14, 2024",
-            eventDescription: "Lorem ipsum dolor sit amet"
-        }
-    ];
+    if (loading) return <div className="vh-loading">Loading volunteer history...</div>;
+    if (error) return <div className="vh-error">Error: {error}</div>;
 
     return (
         <div className="vh-volunteer-history">
@@ -73,11 +86,15 @@ function VolunteerHistory() {
                         {volunteerHistory.length > 0 ? (
                             volunteerHistory.map((event, index) => (
                                 <tr key={index}>
-                                    <td className="vh-status-completed">{event.participationStatus}</td>
+                                    <td className={`vh-status-${event.participationStatus.toLowerCase()}`}>
+                                        {event.participationStatus}
+                                    </td>
                                     <td>{event.eventName}</td>
                                     <td>{event.location}</td>
-                                    <td className="vh-status-medium">{event.requiredSkills}</td>
-                                    <td className="vh-status-medium">{event.urgency}</td>
+                                    <td>{event.requiredSkills}</td>
+                                    <td className={`vh-status-${event.urgency.toLowerCase()}`}>
+                                        {event.urgency}
+                                    </td>
                                     <td>{event.eventDate}</td>
                                     <td>{event.eventDescription}</td>
                                 </tr>
