@@ -19,12 +19,16 @@ function EventEdit() {
     navigate("/");
   };
 
+  const handleNavToVolMatching = () => {
+    navigate("/adminMatching");
+  }
+
   return (
     <div className="ee-container">
       <div className="ee-sidebar">
         <div className="ee-sidebar-links">
           <div className="ee-sidebar-link active">Events</div>
-          <div className="ee-sidebar-link">Volunteer Matching</div>
+          <div className="ee-sidebar-link" onClick={handleNavToVolMatching}>Volunteer Matching</div>
         </div>
         <div className="ee-logout" onClick={handleLogout}>
           Log Out

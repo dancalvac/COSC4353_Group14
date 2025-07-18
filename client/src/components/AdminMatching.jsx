@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './AdminMatching.css';
 
 function AdminMatching() {
@@ -8,26 +9,22 @@ function AdminMatching() {
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
-        /* Some hard coded volunteer names and events for now */
-        const sampleVolunteers = [
-            { id: 1, name: "Charity Smith", skills: "First Aid, ASL" },
-            { id: 2, name: "Henry Nguyen",   skills: "Logistics, Driving" },
-            { id: 3, name: "Max Gibson",    skills: "Photography, Bilingual" },
-            { id: 4, name: "Daniel Calvac", skills: "Dogsitter, Carpenter"} 
-        ];
-        const sampleEvents = [
-            { id: 1, name: "Community Cleanup", date: "07-15-2025" },
-            { id: 2, name: "Fundraising Gala",  date: "08-01-2025" },
-            { id: 3, name: "Food Drive", date: "09-10-2025" },
-            { id: 4, name: "Puppy Pickup", date: "10-17-2025"}
-        ];
-        setVolunteers(sampleVolunteers);
-        setEvents(sampleEvents);
+        const fetch_user_and_event = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/matching`);
+                setVolunteers(response.data.volunteers);
+                setEvents(response.data.events);
+            }
+            catch (error) {
+                console.error('Failed to fetch users and events:', error);
+            }
+        }
+        fetch_user_and_event();
     }, []);
 
     const handleEvents = () => {
         console.log("Navigate to Admin Events");
-            navigate('/adminEvents');
+            navigate('/eventManagement');
     };
 
     const handleLogout = () => {
@@ -35,24 +32,50 @@ function AdminMatching() {
         navigate('/');
     };
 
-    const handleMatch = (volunteerId, eventId) => {
+    const handleMatch = async (volunteerId, eventId) => {
         console.log(`Match volunteer ${volunteerId} → event ${eventId}`);
-        setVolunteers(v => v.filter(x => x.id !== volunteerId));
+
+        // Find the matched volunteer and event objects
+        const volunteer = volunteers.find(v => v.id === volunteerId);
+        const event = events.find(e => e.id === eventId);
+
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/send_notification`, {
+                emails: [volunteer.email],
+                event: event.name
+            });
+
+            console.log("Notification sent:", response.data);
+
+            // Remove matched volunteer from list
+            setVolunteers(prev => prev.filter(v => v.id !== volunteerId));
+        }   
+        catch (err) {
+            console.error("Failed to send notification:", err);
+        }
     };
 
     return (
         <div className="am-admin-matching">
             {/* Sidebar */}
             <div className="am-sidebar">
-                <button className="am-sidebar-item" onClick={handleEvents}>
-                    Events
-                </button>
-                <button className="am-sidebar-item active">
-                    Volunteer Matching
-                </button>
-                <button className="am-logout-button" onClick={handleLogout}>
+                <div className="am-sidebar-links">
+                    <div
+                        className="am-sidebar-item"
+                        onClick={handleEvents}
+                    >
+                        Events
+                    </div>
+                    <div className="am-sidebar-item active">
+                        Volunteer Matching
+                    </div>
+                </div>
+                <div
+                    className="am-logout-button"
+                    onClick={handleLogout}
+                >
                     Log Out
-                </button>
+                </div>
             </div>
 
             {/* Main Content*/}

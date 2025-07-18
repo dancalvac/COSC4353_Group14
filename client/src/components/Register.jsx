@@ -1,6 +1,7 @@
 import React from "react";
 import {useState, useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
+import axios from "axios";
 import './Register.css';
 
 function Register(){
@@ -8,15 +9,42 @@ function Register(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [accessCode, setAccessCode] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        // Validate and Navigate to loginAfterRegister page
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Navigate to Login After Register page");
-        console.log({email, password, isAdmin: isChecked, accessCode: isChecked ? accessCode : null});
-        {/*Do Validation here*/}
-        navigate('/loginAfterRegister'); 
+        setLoading(true);
+        setError('');
+
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/register`, {
+                email,
+                password,
+                isAdmin: isChecked,
+                accessCode: isChecked ? accessCode : null
+            });
+
+            const userData = response.data;
+            console.log('Registration successful:', userData);
+            
+            // Store user data in localStorage
+            localStorage.setItem('user', JSON.stringify(userData.user));
+            
+            // Navigate to login after register page or directly to dashboard
+            navigate('/loginAfterRegister');
+            
+        } catch (error) {
+            console.error('Registration error:', error);
+            if (error.response) {
+                setError(error.response.data.error || 'Registration failed');
+            } else {
+                setError('Network error. Please try again.');
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -31,41 +59,48 @@ function Register(){
                         <h1>Create an Account</h1>
                     </div>
 
-                    <div className="my-3 w-100"> {/*email input*/}
+                    {error && (
+                        <div className="alert alert-danger w-100" role="alert">
+                            {error}
+                        </div>
+                    )}
+
+                    <div className="my-3 w-100">
                         <label htmlFor="emailInput" className="form-label">Email:</label>
                         <input
-                        type="email"
-                        className="form-control border border-black border-2"
-                        id="emailInput"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
+                            type="email"
+                            className="form-control border border-black border-2"
+                            id="emailInput"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            disabled={loading}
                         />
                     </div>
 
-                    <div className="my-3 w-100"> {/*password input*/}
+                    <div className="my-3 w-100">
                         <label htmlFor="passwordInput" className="form-label">Password:</label>
                         <input
-                        type="password"
-                        className="form-control border border-black border-2"
-                        id="passwordInput"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
+                            type="password"
+                            className="form-control border border-black border-2"
+                            id="passwordInput"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            disabled={loading}
                         />
                     </div>
 
-                    <div className="w-100 my-3 admin-checkbox-div"> 
-                        <div className="d-flex flex-column justify-content-center h-100"> {/*admin checkbox*/}
-                                
-                            <div className="ps-2"
-                            style={isChecked ? {paddingBottom: "5%", height: "100px"} : {justifyContent: "center"}}>
+                    <div className="w-100 my-3 admin-checkbox-div">
+                        <div className="d-flex flex-column justify-content-center h-100">
+                            <div className="ps-2" style={isChecked ? {paddingBottom: "5%", height: "100px"} : {justifyContent: "center"}}>
                                 <input
                                     className="admin-checkbox form-check-input border-dark me-2"
                                     type="checkbox"
                                     checked={isChecked}
                                     onChange={() => setIsChecked(!isChecked)}
                                     id="registerAsAdmin"
+                                    disabled={loading}
                                 />
                                 <label className="form-check-label" htmlFor="registerAsAdmin">
                                     Registering as an admin?
@@ -73,26 +108,33 @@ function Register(){
                             </div>
 
                             {isChecked && (
-                            <div>   {/*access code field*/}
+                            <div>
                                 <label htmlFor="accessCodeInput" className="form-label">Access Code:</label>
                                 <input
-                                type="text"
-                                className="form-control border border-black border-2"
-                                id="accessCodeInput"
-                                value={accessCode}
-                                onChange={(e) => setAccessCode(e.target.value)}
-                                required
+                                    type="text"
+                                    className="form-control border border-black border-2"
+                                    id="accessCodeInput"
+                                    value={accessCode}
+                                    onChange={(e) => setAccessCode(e.target.value)}
+                                    required
+                                    disabled={loading}
+                                    placeholder="Enter admin access code"
                                 />
                             </div>
                             )}
                         </div>
                     </div>
 
-                    <button type="submit" className="btn btn-primary w-100 my-3 register-button sign-up-text"> {/*sign up field*/}
-                        Sign Up
+                    <button type="submit" className="btn btn-primary w-100 my-3 register-button sign-up-text" disabled={loading}>
+                        {loading ? 'Creating Account...' : 'Sign Up'}
                     </button>
 
-                    <p>Already have an account? <Link to="/login" className="login-link">Log In</Link></p> {/*already have an account text and button*/}
+                    <p>Already have an account? <Link to="/login" className="login-link">Log In</Link></p>
+                    
+                    {/* Demo info */}
+                    <div className="mt-3 small text-muted">
+                        <p><strong>Admin Access Code:</strong> ADMIN2024</p>
+                    </div>
                 </form>
             </div>
         </div>

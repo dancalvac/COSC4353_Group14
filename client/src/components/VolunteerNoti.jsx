@@ -35,20 +35,21 @@ function VolunteerNoti() {
         <div className="vn-volunteer-noti">
             {/* Sidebar Navigation */}
             <div className="vn-sidebar">
-                <button className="vn-sidebar-item" onClick={handleProfile}>
-                    Profile
-                </button>
-                <button className="vn-sidebar-item"  onClick={handleHistory}>
-                    Volunteer History
-                </button>
-                <button className="vn-sidebar-item active">
-                    Notifications
-                </button>
-                <button className="vn-logout-button" onClick={handleLogout}>
-                    Log Out
-                </button>
+                <div className="vn-sidebar-links">
+                    <div className="vn-sidebar-item" onClick={handleProfile}>
+                        Profile
+                    </div>
+                    <div className="vn-sidebar-item" onClick={handleHistory}>
+                        Volunteer History
+                    </div>
+                    <div className="vn-sidebar-item active">
+                        Notifications
+                    </div>
+                </div>
+                <div className="vn-logout-button" onClick={handleLogout}>
+                        Log Out
+                </div>
             </div>
-
             {/* Main Content */}
             <div className="vn-main-content">
                 <h1 className="vn-noti-title">Your Notifications</h1>

@@ -24,36 +24,45 @@
     background-color: #d3d3d3;
 }
 
-.side-bar-navigation-buttons {
-    background-color: #d3d3d3;
-    border: none;
-    text-align: start;
+.vp-volunteer-profile {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
 }
 
-.side-bar-navigation-buttons:hover {
-    background-color: #c0c0c0;
+.vp-sidebar {
+    width: 200px;
+    background: #ededed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    gap: 0;
 }
 
-.side-bar-navigation-buttons.active {
-    background-color: #b0b0b0;
+.vp-sidebar-links {
+    margin-top: 30px;
+}
+
+.vp-sidebar-item {
+    padding: 16px 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.vp-sidebar-item.active {
     font-weight: bold;
 }
 
-.side-bar-navigation-button-text {
-    margin: 20px;
-    font-size: xx-large;
-    font-weight: bold;
-}
-
-.log-out-button-text {
+.vp-logout-button {
     color: #d32f2f;
-    margin: 20px;
-    font-size: xx-large;
-    font-weight: bold;
-}
-
-.side-bar {
-    background-color: #d3d3d3;
+    font-size: 1.2rem;
+    margin: 30px 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: center;
 }
 
 .welcome-text {
