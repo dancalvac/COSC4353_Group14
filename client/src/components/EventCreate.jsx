@@ -24,12 +24,12 @@ function EventCreate() {
     setter(e.target.value);
   };
   const options = [
-    { value: 'compassion', label: 'Compassion' },
-    { value: 'creativity', label: 'Creativity' },
-    { value: 'nimbleHands', label: 'Nimble Hands' },
-    { value: 'leadership', label: 'Leadership' },
-    { value: 'communication', label: 'Communication' },
-    { value: 'technical', label: 'Technical Skills' }
+    { value: 'Compassion', label: 'Compassion' },
+    { value: 'Creativity', label: 'Creativity' },
+    { value: 'Nimble Hands', label: 'Nimble Hands' },
+    { value: 'Leadership', label: 'Leadership' },
+    { value: 'Communication', label: 'Communication' },
+    { value: 'Technical', label: 'Technical Skills' }
     // add more if necessary
   ];
   const handleSkillChange = (selectedOptions) => {

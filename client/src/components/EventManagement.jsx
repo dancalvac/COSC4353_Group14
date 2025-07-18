@@ -1,26 +1,36 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { use } from "react";
+import {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
 import "./EventManagement.css";
 
 function EventManagementPage() {
+  const [events, setEvents] = useState([]);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Sample event data (static, like VolunteerHistory.jsx)
-  const events = [
-    {
-      name: "",
-      description:
-        "",
-      location: "",
-    },
-    {
-      name: "Beach Cleanup by the harbor",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-      location: "837 Test Boulevard, Austin, TX",
-    },
-  ];
 
+  const fetchEvents = async (e) => {
+    if (e) e.preventDefault(); // Only if triggered by a button/form
+  
+    setLoading(true);
+    setError('');
+  
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/display/events`);
+      setEvents(response.data.Events || []); // or response.data if you didn't wrap in { events: [...] }
+      console.log(events);
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setError('Failed to load events. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchEvents();
+  }, []);
   const handleLogout = () => {
     navigate("/");
   };
@@ -50,64 +60,28 @@ function EventManagementPage() {
         <button className="emp-create-btn" onClick={handleCreateEvent}>
         Create an event
         </button>
-    </div>
-        {/* Hardcoded event cards */}
-        <div className="emp-event-card">
-          <div className="emp-event-fields">
-            <div>
-              <label>Event Name</label>
-              <input className="emp-input" value={events[0].name} readOnly />
-            </div>
-            <div>
-              <label>Event Description</label>
-              <textarea
-                className="emp-input emp-desc-input"
-                value={events[0].description}
-                readOnly
-              />
-            </div>
-            <div>
-              <label>Location</label>
-              <input className="emp-input" value={events[0].location} readOnly />
-            </div>
-          </div>
-          <div className="emp-event-actions">
-            <button className="emp-edit-btn" disabled>
-              Edit
-            </button>
-            <button className="emp-delete-btn" disabled>
-              Delete
-            </button>
-          </div>
         </div>
-        <div className="emp-event-card">
-          <div className="emp-event-fields">
-            <div>
-              <label>Event Name</label>
-              <input className="emp-input" value={events[1].name} readOnly />
-            </div>
-            <div>
-              <label>Event Description</label>
-              <textarea
-                className="emp-input emp-desc-input"
-                value={events[1].description}
-                readOnly
-              />
-            </div>
-            <div>
-              <label>Location</label>
-              <input className="emp-input" value={events[1].location} readOnly />
-            </div>
-          </div>
-          <div className="emp-event-actions">
-            <button className="emp-edit-btn" disabled>
-              Edit
-            </button>
-            <button className="emp-delete-btn" disabled>
-              Delete
-            </button>
-          </div>
-        </div>
+                
+                
+        {loading && <p>Loading events...</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+
+        <ul>
+          {events.map((event, idx) => (
+            <li key={idx}>
+              <h3>{event.eventName}</h3>
+              <p>{event.description}</p>
+              <p><strong>Location:</strong> {event.location}</p>
+              <p><strong>Urgency:</strong> {event.urgency}</p>
+              <p><strong>Date:</strong> {event.eventDate}</p>
+              <p><strong>Skills:</strong> {[event.skill1, event.skill2, event.skill3, event.skill4, event.skill5]
+                  .filter(skill => skill) // Remove empty/null skills
+                  .join(', ')
+                }</p>
+            </li>
+          ))}
+        </ul>
+      
       </div>
     </div>
   );
