@@ -93,3 +93,34 @@ def test_register_admin_success(client):
     data = json.loads(response.data)
     assert data['message'] == 'Registration successful'
     assert data['user']['role'] == 'admin'
+
+def test_volunteer_history_default_email(client):
+    response = client.get('/volunteer/history')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'volunteer_history' in data
+    assert isinstance(data['volunteer_history'], list)
+
+def test_volunteer_history_custom_email(client):
+    response = client.get('/volunteer/history?email=volunteer1@example.com')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'volunteer_history' in data
+    assert isinstance(data['volunteer_history'], list)
+    # Should match the hardcoded sample for volunteer1@example.com
+    assert any(event.get('eventName') == 'Food Bank Fair' for event in data['volunteer_history'])
+
+def test_volunteer_history_unknown_email(client):
+    response = client.get('/volunteer/history?email=unknown@example.com')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'volunteer_history' in data
+    assert data['volunteer_history'] == []
+
+def test_volunteer_history_missing_email_param(client):
+    # Should default to volunteer1@example.com
+    response = client.get('/volunteer/history?email=')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'volunteer_history' in data
+    assert isinstance(data['volunteer_history'], list)
