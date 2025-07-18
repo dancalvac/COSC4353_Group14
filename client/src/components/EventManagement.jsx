@@ -6,18 +6,15 @@ import "./EventManagement.css";
 function EventManagementPage() {
   const [events, setEvents] = useState([]);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch events from backend when component mounts
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:5000/events");
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/events`);
         setEvents(response.data.events);
         setLoading(false);
       } catch (err) {
@@ -70,60 +67,64 @@ function EventManagementPage() {
         </div>
         {/* Event cards from state */}
         <div className="events-list">
-          {events.map((event) => (
-            <div key={event.id} className="emp-event-card">
-              <div className="emp-event-fields">
-                <div>
-                  <label>Event Name</label>
-                  <input
-                    className="emp-input"
-                    value={event.title}
-                    readOnly
-                  />
+          {events.length > 0 ? (
+            events.map((event) => (
+              <div key={event.id} className="emp-event-card">
+                <div className="emp-event-fields">
+                  <div>
+                    <label>Event Name</label>
+                    <input
+                      className="emp-input"
+                      value={event.title}
+                      readOnly
+                    />
+                  </div>
+                  <div>
+                    <label>Event Description</label>
+                    <textarea
+                      className="emp-input emp-desc-input"
+                      value={event.description}
+                      readOnly
+                    />
+                  </div>
+                  <div>
+                    <label>Location</label>
+                    <input
+                      className="emp-input"
+                      value={event.location}
+                      readOnly
+                    />
+                  </div>
+                  <div>
+                    <label>Date</label>
+                    <input className="emp-input" value={event.date} readOnly />
+                  </div>
+                  <div>
+                    <label>Status</label>
+                    <input className="emp-input" value={event.status} readOnly />
+                  </div>
+                  <div>
+                    <label>Volunteers</label>
+                    <input
+                      className="emp-input"
+                      value={`${event.volunteers_assigned}/${event.volunteers_needed}`}
+                      readOnly
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label>Event Description</label>
-                  <textarea
-                    className="emp-input emp-desc-input"
-                    value={event.description}
-                    readOnly
-                  />
-                </div>
-                <div>
-                  <label>Location</label>
-                  <input
-                    className="emp-input"
-                    value={event.location}
-                    readOnly
-                  />
-                </div>
-                <div>
-                  <label>Date</label>
-                  <input className="emp-input" value={event.date} readOnly />
-                </div>
-                <div>
-                  <label>Status</label>
-                  <input className="emp-input" value={event.status} readOnly />
-                </div>
-                <div>
-                  <label>Volunteers</label>
-                  <input
-                    className="emp-input"
-                    value={`${event.volunteers_assigned}/${event.volunteers_needed}`}
-                    readOnly
-                  />
+                <div className="emp-event-actions">
+                  <button className="emp-edit-btn" disabled>
+                    Edit
+                  </button>
+                  <button className="emp-delete-btn" disabled>
+                    Delete
+                  </button>
                 </div>
               </div>
-              <div className="emp-event-actions">
-                <button className="emp-edit-btn" disabled>
-                  Edit
-                </button>
-                <button className="emp-delete-btn" disabled>
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <div>No events available</div>
+          )}
         </div>
       </div>
     </div>
