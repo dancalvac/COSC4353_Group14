@@ -124,3 +124,37 @@ def test_volunteer_history_missing_email_param(client):
     data = response.get_json()
     assert 'volunteer_history' in data
     assert isinstance(data['volunteer_history'], list)
+
+def test_create_event_success(client):
+    response = client.post('/create/event',
+                            json={'eventName': 'Community Service',
+                                    'description': 'testing for successful event creation',
+                                    'location': '123 Test St.',
+                                    'urgency': 'High',
+                                    'skill1': 'Fast',
+                                    'skill2': 'Team-player',
+                                    'skill3': '',
+                                    'skill4': '',
+                                    'skill5': '',
+                                    'eventDate': '2025-07-19'})
+    assert response.status_code == 200
+    data = json.loads(response.data)
+    assert data['message'] == 'Event Created!'
+    assert data['event_name'] == 'Community Service'
+def test_create_event_missing_required_input(client):
+    response = client.post('/create/event',
+                            json={'description': 'This does not hold all required input',
+                                    'skill2': 'Nimble Hands',
+                                    'skill3': 'Technical',
+                                    'skill4': '',
+                                    'skill5': ''
+                                    })
+    assert response.status_code == 400
+    data = json.loads(response.data)
+    assert 'error' in data 
+def test_display_event_success(client):
+    response = client.get('/display/events')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'Events' in data
+    assert isinstance(data['Events'], list)

@@ -3,7 +3,18 @@ from flask import Blueprint, request, jsonify
 events_bp = Blueprint('events', __name__)
 
 HARDCODED_EVENTS = {
-
+    'Food Bank': {
+        'eventName': 'Food Bank',
+        'description': 'Help distribute food to members of community',
+        'location': '1234 Circle St.',
+        'urgency': 'High',
+        'skill1': 'Nimble Hands',
+        'skill2': 'Fast',
+        'skill3': 'Team-player',
+        'skill4': '',
+        'skill5': '',
+        'eventDate': '2025-07-19',
+    }
 }
 
 @events_bp.route('/create/event', methods=['POST'])
@@ -34,12 +45,12 @@ def create_event():
             'skill3': skill3,
             'skill4': skill4,
             'skill5': skill5,
-            'eventDate': eventDate,
+            'eventDate': eventDate
         }
         print("Created Event!")
         print('Event Name:', eventName, 'Description:', description, 'Location:', location, 'Urgency:', urgency, 'Skill 5:', skill5, 'Event Date:', eventDate)
         return jsonify({
-            'message': 'backend stuff',
+            'message': 'Event Created!',
             'event_name': eventName,
             'event': {
                 'description': description,
