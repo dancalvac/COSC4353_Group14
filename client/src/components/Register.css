@@ -1,0 +1,23 @@
+.admin-checkbox {
+    transform: scale(1.5);
+}
+
+.admin-checkbox-div {
+    height: 100px;
+}
+
+.background-color {
+    background-color: #d3d3d3;
+}
+
+.login-link {
+    color: black;
+}
+
+.register-button {
+    min-height: 75px;
+}
+
+.sign-up-text {
+    text-decoration: 0;
+}

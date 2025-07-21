@@ -1,0 +1,158 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.vn-volunteer-noti {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+/* Sidebar Navigation */
+.vn-sidebar {
+    width: 200px;
+    background: #ededed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    gap: 0;
+}
+
+.vn-sidebar-links {
+    margin-top: 30px;
+}
+
+.vn-sidebar-item {
+    padding: 16px 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.vn-sidebar-item.active {
+    font-weight: bold;
+}
+
+.vn-logout-button {
+    color: #d32f2f;
+    font-size: 1.2rem;
+    margin: 30px 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: center;
+}
+
+/* Main Content Area */
+.vn-main-content {
+    flex: 1;
+    padding: 30px 40px;
+    background-color: white;
+}
+
+.vn-noti-title {
+    font-size: 40px;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: normal;
+}
+
+/* Notification Content */
+.vn-notification-container {
+    background-color: #e8e8e8;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.vn-notification-text {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.vn-no-notifications {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 40px 20px;
+    text-align: center;
+    color: #666;
+    font-size: 18px;
+    font-style: italic;
+}
+
+/* Notification metadata */
+.vn-notification-date {
+    font-size: 14px;
+    color: #888;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+.vn-notification-priority {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.vn-priority-high {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.vn-priority-medium {
+    background-color: #fff3e0;
+    color: #ef6c00;
+}
+
+.vn-priority-low {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .vn-volunteer-noti {
+        flex-direction: column;
+    }
+    
+    .vn-sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 10px 0;
+    }
+    
+    .vn-sidebar-item,
+    .vn-logout-button {
+        white-space: nowrap;
+        padding: 10px 15px;
+        font-size: 18px;
+    }
+    
+    .vn-main-content {
+        padding: 20px;
+    }
+    
+    .vn-noti-title {
+        font-size: 28px;
+    }
+    
+    .vn-notification-text {
+        font-size: 14px;
+    }
+    
+    .vn-no-notifications {
+        font-size: 16px;
+        padding: 30px 15px;
+    }
+}

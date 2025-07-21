@@ -1,0 +1,134 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.vh-volunteer-history {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+/* Sidebar Navigation */
+.vh-sidebar {
+    width: 200px;
+    background: #ededed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    gap: 0;
+}
+
+.vh-sidebar-links {
+    margin-top: 30px;
+}
+
+.vh-sidebar-item {
+    padding: 16px 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.vh-sidebar-item.active {
+    font-weight: bold;
+}
+
+.vh-logout-button {
+    color: #d32f2f;
+    font-size: 1.2rem;
+    margin: 30px 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: center;
+}
+
+/* Main Content Area */
+.vh-main-content {
+    flex: 1;
+    padding: 30px 40px;
+    background-color: white;
+}
+
+.vh-history-title {
+    font-size: 40px;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: normal;
+}
+
+/* Table Styles */
+.vh-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #e8e8e8;
+    border: 1px solid #ccc;
+}
+
+.vh-history-table th,
+.vh-history-table td {
+    border: 1px solid #999;
+    padding: 12px 8px;
+    text-align: left;
+    font-size: 16px;
+}
+
+.vh-history-table th {
+    background-color: #d0d0d0;
+    font-weight: bold;
+    color: #333;
+}
+
+.vh-history-table td {
+    background-color: #e8e8e8;
+    color: #333;
+}
+
+.vh-history-table tr:nth-child(even) td {
+    background-color: #f0f0f0;
+}
+
+.vh-status-completed {
+    color: #666;
+    font-style: italic;
+}
+
+.vh-status-medium {
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .vh-volunteer-history {
+        flex-direction: column;
+    }
+    
+    .vh-sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 10px 0;
+    }
+    
+    .vh-sidebar-item,
+    .vh-logout-button {
+        white-space: nowrap;
+        padding: 10px 15px;
+    }
+    
+    .vh-main-content {
+        padding: 20px;
+    }
+    
+    .vh-history-table {
+        font-size: 10px;
+    }
+    
+    .vh-history-table th,
+    .vh-history-table td {
+        padding: 8px 4px;
+    }
+}

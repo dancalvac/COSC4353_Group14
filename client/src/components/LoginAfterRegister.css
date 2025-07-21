@@ -1,0 +1,12 @@
+.background-color {
+    background-color: #d3d3d3;
+}
+
+.login-button {
+    min-height: 75px;
+}
+
+.login-text {
+    color: white;
+    text-decoration: 0;
+}
