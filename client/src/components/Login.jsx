@@ -16,7 +16,7 @@ function Login(){
         setError('');
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/login`, {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/test/login`, {
                 email,
                 password
             });
@@ -28,7 +28,7 @@ function Login(){
             localStorage.setItem('user', JSON.stringify(userData.user));
             
             // Navigate based on user role
-            if (userData.user.role === 'admin') {
+            if (userData.user.role === 'Admin') {
                 navigate('/eventManagement'); // Create this route
             } else {
                 navigate('/volunteerProfile'); // Create this route
@@ -95,12 +95,12 @@ function Login(){
                     </button>
 
                     <p>Don’t have an account? <Link to="/register" className="register-link">Create an account</Link></p> {/*create an account button*/}
-                    {/* Demo credentials info */}
+                    {/* Demo credentials info 
                     <div className="mt-3 small text-muted">
                         <p><strong>Demo Credentials:</strong></p>
                         <p>Admin: admin@example.com / admin123</p>
                         <p>Volunteer: volunteer@example.com / volunteer123</p>
-                    </div>
+                    </div>*/}
                 </form>
             </div>
         </div>
