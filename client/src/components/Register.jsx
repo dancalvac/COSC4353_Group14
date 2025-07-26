@@ -20,7 +20,7 @@ function Register(){
         setError('');
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/test/register`, {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/register`, {
                 fullName,
                 email,
                 password,
