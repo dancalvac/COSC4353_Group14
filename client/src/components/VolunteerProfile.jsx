@@ -139,7 +139,7 @@ function VolunteerProfile(){
         const skill2 = skills[1]?.value || ''  
         const skill3 = skills[2]?.value || ''
         try{
-            const response = await axios.patch(`${import.meta.env.VITE_API_URL}/test/volunteer/profile`, {
+            const response = await axios.patch(`${import.meta.env.VITE_API_URL}/updateUserProfile`, {
                 fullName,
                 userId,
                 email,
