@@ -14,8 +14,13 @@ function VolunteerHistory() {
         const fetchVolunteerHistory = async () => {
             try {
                 setLoading(true);
+                const user = JSON.parse(localStorage.getItem('user'));
+                const userId = user?.user_id;
+
                 // You can pass the email as a query parameter or get from context/state
-                const response = await axios.get('http://localhost:5000/volunteer/history');
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/volunteer/history`, {
+                    params: {userID: userId}
+                });
                 setVolunteerHistory(response.data.volunteer_history);
                 setLoading(false);
             } catch (err) {
@@ -40,6 +45,7 @@ function VolunteerHistory() {
 
     const handleLogout = () => {
         console.log("Logout user");
+        localStorage.removeItem('user');
         navigate('/');
     };
 
