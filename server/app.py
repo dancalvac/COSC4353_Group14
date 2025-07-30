@@ -1,4 +1,5 @@
 from flask import Flask
+import os
 from flask_cors import CORS
 from routes.auth import auth_bp
 from routes.test import test_bp
@@ -20,9 +21,14 @@ def create_app():
     app.register_blueprint(matching_bp)
     app.register_blueprint(events_bp)
     app.register_blueprint(volunteer_history_bp)
-    
+
     return app
 
+# The global 'app' instance that Gunicorn will import
+app = create_app()
+
 if __name__ == '__main__':
-    app = create_app()
-    app.run(debug=True)
+    # Railway will provide the PORT environment variable
+    port = int(os.environ.get('PORT', 5000)) # Default to 5000 for local dev
+    
+    app.run(host='0.0.0.0', port=port, debug=True)

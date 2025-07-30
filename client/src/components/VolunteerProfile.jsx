@@ -6,6 +6,7 @@ import axios from 'axios';
 import './VolunteerProfile.css';
 
 function VolunteerProfile(){
+    const [userId, setUserId] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
@@ -97,7 +98,7 @@ function VolunteerProfile(){
     };
 
     const validateForm = () => {
-        if (!fullName || !addressOne || !city || !state || !zipcode || !email || !password) {
+        if (!fullName || !addressOne || !city || !state || !zipcode || !password) {
             setError('Please fill in all required fields');
             return false;
         }
@@ -118,8 +119,8 @@ function VolunteerProfile(){
         setLoading(true);
         setError('');
         setSuccessMessage('');
-        console.log(fullName, addressOne, addressTwo, preferences, city, state, zipcode, skills[0].value);
-        console.log(availability.monday.start);
+        //console.log(fullName, addressOne, addressTwo, preferences, city, state, zipcode, skills[0].value);
+        //console.log(availability.monday.start);
         const monday_start = availability.monday.start
         const monday_end = availability.monday.end
         const tuesday_start = availability.tuesday.start
@@ -138,9 +139,10 @@ function VolunteerProfile(){
         const skill2 = skills[1]?.value || ''  
         const skill3 = skills[2]?.value || ''
         try{
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/volunteer/profile`, {
-                email,
+            const response = await axios.patch(`${import.meta.env.VITE_API_URL}/updateUserProfile`, {
                 fullName,
+                userId,
+                email,
                 password,
                 addressOne,
                 addressTwo,
@@ -175,6 +177,10 @@ function VolunteerProfile(){
                 setError('Please check your input and try again.');
             } else if (error.response?.status === 500) {
                 setError('Server error. Please try again later.');
+            } else if (error.response?.status === 401) {
+                setError('Incorrect password. Try again.');
+            } else if (error.response?.status === 404) {
+                setError('User not found.');
             } else if (error.request) {
                 setError('Network error. Please check your connection.');
             } else {
@@ -201,7 +207,20 @@ function VolunteerProfile(){
 
     useEffect(() => {
         document.title = "Volunteer Profile";
-    }, []);
+        
+        // Get user data from localStorage
+        const userData = localStorage.getItem('user');
+        if (userData) {
+            const user = JSON.parse(userData);
+            setUserId(user.user_id);
+            setEmail(user.email);
+            // You can also set other fields if they exist in localStorage
+            if (user.full_name) setFullName(user.full_name);
+        } else {
+            // If no user data, redirect to login
+            navigate('/login');
+        }
+    }, [navigate]);
 
     return (
         <div className="vp-volunteer-profile">
@@ -311,6 +330,7 @@ function VolunteerProfile(){
                                         onChange={handleInputChange(setEmail)} 
                                         required
                                         disabled={loading}
+                                        readOnly
                                     />
                                 </div>
                             </div>

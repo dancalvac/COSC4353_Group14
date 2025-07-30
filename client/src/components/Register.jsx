@@ -5,6 +5,7 @@ import axios from "axios";
 import './Register.css';
 
 function Register(){
+    const [fullName, setFullName] = useState('');
     const [isChecked, setIsChecked] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -20,10 +21,11 @@ function Register(){
 
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/register`, {
+                fullName,
                 email,
                 password,
                 isAdmin: isChecked,
-                accessCode: isChecked ? accessCode : null
+                accessCode: isChecked ? accessCode : ''
             });
 
             const userData = response.data;
@@ -64,6 +66,19 @@ function Register(){
                             {error}
                         </div>
                     )}
+
+                    <div className="my-3 w-100">
+                        <label htmlFor="fullNameInput" className="form-label">Full Name:</label>
+                        <input
+                            type="text"
+                            className="form-control border border-black border-2"
+                            id="fullNameInput"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            required
+                            disabled={loading}
+                        />
+                    </div>
 
                     <div className="my-3 w-100">
                         <label htmlFor="emailInput" className="form-label">Email:</label>
@@ -131,10 +146,10 @@ function Register(){
 
                     <p>Already have an account? <Link to="/login" className="login-link">Log In</Link></p>
                     
-                    {/* Demo info */}
+                    {/* Demo info }
                     <div className="mt-3 small text-muted">
                         <p><strong>Admin Access Code:</strong> ADMIN2024</p>
-                    </div>
+                    </div>*/}
                 </form>
             </div>
         </div>
