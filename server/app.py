@@ -27,8 +27,14 @@ def create_app():
 # The global 'app' instance that Gunicorn will import
 app = create_app()
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
     # Railway will provide the PORT environment variable
-    port = int(os.environ.get('PORT', 5000)) # Default to 5000 for local dev
+ #   port = int(os.environ.get('PORT', 5001)) # Default to 5000 for local dev
     
-    app.run(host='0.0.0.0', port=port, debug=True)
+  #  app.run(host='0.0.0.0', port=port, debug=True)
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    # Railway provides RAILWAY_ENVIRONMENT (not RAILWAY_ENVIRONMENT_NAME)
+    is_production = os.environ.get('RAILWAY_ENVIRONMENT') == 'production'
+    app.run(host='0.0.0.0', port=port, debug=not is_production)

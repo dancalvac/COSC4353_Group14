@@ -3,6 +3,14 @@ from db import get_connection
 
 test_bp = Blueprint('test', __name__)
 
+@test_bp.route('/test')
+def test():
+    return "Hello from Flask test route!"
+
+@test_bp.route('/health')
+def health():
+    return {'status': 'ok'}, 200
+
 @test_bp.route('/api/tables', methods=['GET'])
 def tables():
     try:
