@@ -68,22 +68,31 @@ function EventManagementPage() {
         {events.length === 0 && !loading && !error && (
           <p>No events found. Create your first event!</p>
         )}
-        <ul>
-          {events.map((event, idx) => (
-            <li key={idx}>
-              <h3>{event.eventName}</h3>
-              <p>{event.description}</p>
-              <p><strong>Location:</strong> {event.location}</p>
-              <p><strong>Urgency:</strong> {event.urgency}</p>
-              <p><strong>Date:</strong> {event.eventDate}</p>
-              <p><strong>Skills:</strong> {[event.skill1, event.skill2, event.skill3, event.skill4, event.skill5]
-                  .filter(skill => skill) // Remove empty/null skills
-                  .join(', ')
-                }</p>
-            </li>
-          ))}
-        </ul>
-      
+        {events.map((event, idx) => (
+        <div className="emp-event-card" key={idx} style={{ position: "relative" }}>
+          <button
+            className="emp-edit-btn"
+            style={{
+              position: "absolute",
+              top: "16px",
+              right: "16px",
+              zIndex: 2
+            }}
+            onClick={() => navigate(`/eventEdit/${event.event_id}`)}
+          >
+            Edit
+          </button>
+          <h3>{event.event_name}</h3>
+          <p style={{ marginTop: "-10px", marginBottom: "10px", color: "#555" }}>
+            {event.description}
+          </p>
+          <p><strong>Location:</strong> {event.location}</p>
+          <p><strong>Urgency:</strong> {event.urgency}</p>
+          <p><strong>Date:</strong> {event.event_date}</p>
+          <p><strong>Max Volunteers:</strong> {event.max_volunteers}</p>
+          <p><strong>Skills:</strong> {event.skills || "None"}</p>
+        </div>
+      ))}
       </div>
     </div>
   );

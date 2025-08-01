@@ -30,7 +30,7 @@ function App() {
         <Route path="/volunteerNotifications" element={<VolunteerNoti />} />
         <Route path="/eventManagement" element={<EventManagement />} />
         <Route path="/eventCreate" element={<EventCreate />} />
-        <Route path="/eventEdit" element={<EventEdit />} />
+        <Route path="/eventEdit/:eventId" element={<EventEdit />} />
         <Route path="/adminMatching" element={<AdminMatching />} />
         <Route path="/test" element={<Testing/>} />
         {/* Add more routes as needed */}
