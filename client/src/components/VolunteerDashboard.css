@@ -142,3 +142,7 @@
     border-radius: 5px;
     margin-top: 1rem;
 }
+.vd-info-value {
+    font-family: monospace;
+    color: rgb(125, 124, 124)
+}

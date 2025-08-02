@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from db import get_connection
 
 profile_bp = Blueprint('profile', __name__)
@@ -14,6 +14,7 @@ def save_profile():
         user_id = data.get('userId')
         email = data.get('email')
         password = data.get('password')
+        newPassword = data.get('newPassword')
         address_one = data.get('addressOne')
         address_two = data.get('addressTwo')
         city = data.get('city')
@@ -67,19 +68,45 @@ def save_profile():
         
         if not check_password_hash(hashed_password[0], password):
             return jsonify({'error': 'Incorrect password'}), 401
-        update_query = """UPDATE Users
-                        SET	    full_name = %s,
+        
+        parameters = []
+
+        if newPassword:
+            # Hash the new password before storing
+            new_hashed_password = generate_password_hash(newPassword)
+        
+            update_query = """UPDATE Users
+                            SET password = %s, full_name = %s,
                                 address_one = %s, address_two = %s, city = %s, 
                                 state = %s, zipcode = %s, preferences = %s, 
                                 monday_start = %s, monday_end = %s, 
                                 tuesday_start = %s, tuesday_end = %s, 
                                 wednesday_start = %s, wednesday_end = %s, 
                                 thursday_start = %s, thursday_end = %s, 
-                                friday_start =  %s, friday_end = %s, 
+                                friday_start = %s, friday_end = %s, 
                                 saturday_start = %s, saturday_end = %s, 
                                 sunday_start = %s, sunday_end = %s
-                        WHERE user_id = %s AND email = %s"""
-        parameters = (
+                            WHERE user_id = %s AND email = %s"""
+        
+            parameters = [
+                new_hashed_password,  # Include hashed password first
+            ]
+        else:
+            # Don't update password
+            update_query = """UPDATE Users
+                            SET full_name = %s,
+                                address_one = %s, address_two = %s, city = %s, 
+                                state = %s, zipcode = %s, preferences = %s, 
+                                monday_start = %s, monday_end = %s, 
+                                tuesday_start = %s, tuesday_end = %s, 
+                                wednesday_start = %s, wednesday_end = %s, 
+                                thursday_start = %s, thursday_end = %s, 
+                                friday_start = %s, friday_end = %s, 
+                                saturday_start = %s, saturday_end = %s, 
+                                sunday_start = %s, sunday_end = %s
+                            WHERE user_id = %s AND email = %s"""
+        
+        parameters.extend([
             full_name,
             address_one, 
             address_two, 
@@ -103,10 +130,16 @@ def save_profile():
             sunday_end,
             user_id,
             email
-        )
-        cursor.execute(update_query, parameters)
+        ])
 
+        cursor.execute(update_query, parameters)
         
+
+        #Delete previous skills since user would be inserting newer skills
+        delete_query = """
+        DELETE from UserSkills
+        WHERE user_id = %s;"""
+        cursor.execute(delete_query, (user_id, ))
         #Now on inserting the skills
         skills = [
             (skill1, user_id),
@@ -120,13 +153,6 @@ def save_profile():
             cursor.executemany(insert_query, filled_skills)
         
         conn.commit()
-        #for skill in skills:
-         #   if skill:
-          #      cursor.execute(insert_query, (skill, user_id))
-        #conn.commit()
-                #else:
-                 #   conn.rollback()  # Rollback if something went wrong
-                  #  return jsonify({'error': 'Failed to add skills'}), 500
         
         return jsonify({
                 'message': 'User updated successfully!',

@@ -9,6 +9,7 @@ function VolunteerProfile(){
     const [userId, setUserId] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [addressOne, setAddressOne] = useState('');
     const [addressTwo, setAddressTwo] = useState('');
@@ -144,6 +145,7 @@ function VolunteerProfile(){
                 userId,
                 email,
                 password,
+                newPassword,
                 addressOne,
                 addressTwo,
                 city,
@@ -348,7 +350,7 @@ function VolunteerProfile(){
                             </div>
                             <div className="row mx-1 my-3"> {/*Password*/}
                                 <div className="col">
-                                    <label htmlFor="password">Password</label>
+                                    <label htmlFor="password">Password*</label>
                                     <input 
                                         type="password" 
                                         className="form-control border border-black border-2" 
@@ -356,6 +358,19 @@ function VolunteerProfile(){
                                         value={password}
                                         onChange={handleInputChange(setPassword)} 
                                         required
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+                            <div className="row mx-1 my-3"> {/*Password*/}
+                                <div className="col">
+                                    <label htmlFor="new-password">New Password (optional)</label>
+                                    <input 
+                                        type="password" 
+                                        className="form-control border border-black border-2" 
+                                        id="new-password" 
+                                        value={newPassword}
+                                        onChange={handleInputChange(setNewPassword)}
                                         disabled={loading}
                                     />
                                 </div>

@@ -82,19 +82,19 @@ function VolunteerDashboard(){
 
     return (
         <div className="vd-volunteer-dashboard">
-            <div className="vp-sidebar">
-                <div className="vp-sidebar-links">
-                    <div className="vp-sidebar-item active" onClick={navigateToDashboard}>
+            <div className="vd-sidebar">
+                <div className="vd-sidebar-links">
+                    <div className="vd-sidebar-item active" onClick={navigateToDashboard}>
                         Profile
                     </div>
-                    <div className="vp-sidebar-item" onClick={navigateToVolunteerHistory}>
+                    <div className="vd-sidebar-item" onClick={navigateToVolunteerHistory}>
                         Volunteer History
                     </div>
-                    <div className="vp-sidebar-item" onClick={navigateToNotifications}>
+                    <div className="vd-sidebar-item" onClick={navigateToNotifications}>
                         Notifications
                     </div>
                 </div>
-                <div className="vp-logout-button" onClick={logOut}>
+                <div className="vd-logout-button" onClick={logOut}>
                     Log Out
                 </div>
             </div>
@@ -131,11 +131,11 @@ function VolunteerDashboard(){
                                 </div>
                                 <div className="vd-card-content">
                                     <div className="vd-info-row">
-                                        <span className="vd-info-label">Full Name:</span>
+                                        <span className="vd-info-label">Full Name: </span>
                                         <span className="vd-info-value">{userDetails.full_name || 'Not provided'}</span>
                                     </div>
                                     <div className="vd-info-row">
-                                        <span className="vd-info-label">Email:</span>
+                                        <span className="vd-info-label">Email: </span>
                                         <span className="vd-info-value">{userDetails.email || 'Not provided'}</span>
                                     </div>
                                 </div>
@@ -147,7 +147,7 @@ function VolunteerDashboard(){
                                 </div>
                                 <div className="vd-card-content">
                                     <div className="vd-info-row">
-                                        <span className="vd-info-label">Address:</span>
+                                        <span className="vd-info-label">Address: </span>
                                         <span className="vd-info-value">{userDetails.address || 'Not provided'}</span>
                                     </div>
                                 </div>
