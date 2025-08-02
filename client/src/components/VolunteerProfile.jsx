@@ -192,9 +192,9 @@ function VolunteerProfile(){
     };
 
     const logOut = (e) => {
-        // Log the user out
         e.preventDefault();
         console.log("Logging the user out");
+        localStorage.removeItem('user'); // Clear localStorage on logout
         navigate('/home');
     };
 
@@ -245,11 +245,22 @@ function VolunteerProfile(){
                 <form className="d-flex flex-column main-content-div" onSubmit={handleSubmit}> {/*Form that holds all the main content*/}
                     <div className="main-content-div-header d-flex justify-content-between align-items-center"> {/*Header*/}
                         <div className="w-50 welcome-text"> {/*Welcome Text*/}
-                            Welcome!
+                            Edit Profile
                         </div>
+                        <div className="d-flex gap-3">
+                        <button
+                            type="button"
+                            className="btn btn-danger"
+                            style={{width: '140px'}}
+                            onClick={navigateToDashboard}
+                        >
+                            Cancel
+                        </button>
+                        
                         <button 
                             type="submit" 
-                            className="btn btn-primary w-25" 
+                            className="btn btn-primary"
+                            style={{width: '140px'}}
                             disabled={loading}
                         >
                             {loading ? (
@@ -261,6 +272,7 @@ function VolunteerProfile(){
                                 'Save'
                             )}
                         </button>
+                        </div>
                     </div>
                     {/* Error/Success Messages */}
                     {error && (
