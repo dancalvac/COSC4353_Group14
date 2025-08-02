@@ -25,7 +25,7 @@ def create_app():
     return app
 
 
-app = create_app()
+#app = create_app()
 
 if __name__ == '__main__':
     # Railway will provide the PORT environment variable

@@ -4,9 +4,8 @@ from db import get_connection
 
 profile_bp = Blueprint('profile', __name__)
 
-
 @profile_bp.route('/updateUserProfile', methods=['PATCH'])
-def test_save_profile():
+def save_profile():
     conn = None
     cursor = None
     try:
@@ -148,3 +147,50 @@ def test_save_profile():
         if conn:
             conn.close()
 
+
+@profile_bp.route('/displayVolunteerProfile', methods=['GET'])
+def get_volunteer_profile():
+    conn = None
+    cursor = None
+    try:
+        user_id = request.args.get('userId')
+
+        if not user_id:
+            
+            return jsonify({'error': 'User ID is required'}), 400
+        
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        select_query = """
+        SELECT full_name, email, 
+        CONCAT(address_one, ' ', address_two, ' ', city, ', ', state, ' ', zipcode) as address
+        FROM Users
+        WHERE user_id = %s"""
+        cursor.execute(select_query, (user_id, ))
+        user = cursor.fetchone()
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        #When a person is first registering the address will  be blank
+        #address = user[2]
+        #if not address:
+         #   address = 'N/A'
+        
+        return jsonify({
+            'message': 'User details',
+            'full_name': user[0],
+            'email': user[1],
+            'address': user[2]}), 200
+
+
+    except Exception as e:
+        print(f"Get error: {str(e)}")  # Debug print
+        
+        return jsonify({'error': str(e)}), 500
+    finally:
+        # Clean up connections
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()

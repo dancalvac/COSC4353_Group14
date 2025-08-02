@@ -76,11 +76,11 @@ function VolunteerProfile(){
     };
 
 
-    const navigateToProfile = (e) => {
-        // Navigate to Profile
+    const navigateToDashboard = (e) => {
+        // Navigate to Dashboard
         e.preventDefault();
-        console.log("Navigate to Profile page");
-        navigate('/volunteerProfile');
+        console.log("Navigate to Dashboard page");
+        navigate('/volunteerDashboard');
     };
 
     const navigateToVolunteerHistory = (e) => {
@@ -227,7 +227,7 @@ function VolunteerProfile(){
             {/* Sidebar Navigation */}
             <div className="vp-sidebar">
                 <div className="vp-sidebar-links">
-                    <div className="vp-sidebar-item active" onClick={navigateToProfile}>
+                    <div className="vp-sidebar-item active" onClick={navigateToDashboard}>
                         Profile
                     </div>
                     <div className="vp-sidebar-item" onClick={navigateToVolunteerHistory}>

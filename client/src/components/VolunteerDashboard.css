@@ -1,0 +1,144 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  .background-color-profile {
+      background-color: white;
+  }
+  
+  .invisible-box-in-side-bar {
+      width: 100%;
+      height: 90%;
+  }
+  
+  .main-content-div {
+      width: 95%;
+      height: 90%;
+  }
+  
+  .main-content-div-header {
+      min-height:100px;
+  }
+  
+  .main-content-div-body {
+      background-color: #d3d3d3;
+  }
+.vd-volunteer-dashboard {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+  
+.vd-sidebar {
+    width: 200px;
+    background: #ededed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    gap: 0;
+}
+
+.vd-sidebar-links {
+    margin-top: 30px;
+}
+
+.vd-sidebar-item {
+    padding: 16px 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.vd-sidebar-item.active {
+    font-weight: bold;
+}
+
+.vd-logout-button {
+    color: #d32f2f;
+    font-size: 1.2rem;
+    margin: 30px 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: center;
+}
+
+.vd-profile-section {
+    max-width: 800px;
+  }
+  
+  .vd-profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .vd-edit-profile-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .vd-profile-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .vd-profile-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+  
+  .vd-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .vd-main-content {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.vd-welcome-box {
+    text-align: center;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 800px;
+}
+
+.vd-welcome-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.vd-welcome-subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    margin: 0;
+}
+
+.vd-loading {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.vd-error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+}

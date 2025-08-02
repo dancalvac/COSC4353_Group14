@@ -33,9 +33,9 @@ function VolunteerHistory() {
         fetchVolunteerHistory();
     }, []);
 
-    const handleProfile = () => {
-        console.log("Navigate to profile");
-        navigate('/volunteerProfile');
+    const handleDashboard = () => {
+        console.log("Navigate to dashboard");
+        navigate('/volunteerDashboard');
     };
 
     const handleNotifications = () => {
@@ -57,7 +57,7 @@ function VolunteerHistory() {
             {/* Sidebar Navigation */}
             <div className="vh-sidebar">
                 <div className="vh-sidebar-links">
-                    <div className="vh-sidebar-item" onClick={handleProfile}>
+                    <div className="vh-sidebar-item" onClick={handleDashboard}>
                         Profile
                     </div>
                     <div className="vh-sidebar-item active">

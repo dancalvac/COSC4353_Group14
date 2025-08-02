@@ -5,9 +5,9 @@ import './VolunteerNoti.css';
 function VolunteerNoti() {
     const navigate = useNavigate();
 
-    const handleProfile = () => {
-        console.log("Navigate to profile");
-        navigate('/volunteerProfile');
+    const handleDashboard = () => {
+        console.log("Navigate to dashboard");
+        navigate('/volunteerDashboard');
     };
 
     const handleHistory = () => {
@@ -36,7 +36,7 @@ function VolunteerNoti() {
             {/* Sidebar Navigation */}
             <div className="vn-sidebar">
                 <div className="vn-sidebar-links">
-                    <div className="vn-sidebar-item" onClick={handleProfile}>
+                    <div className="vn-sidebar-item" onClick={handleDashboard}>
                         Profile
                     </div>
                     <div className="vn-sidebar-item" onClick={handleHistory}>
