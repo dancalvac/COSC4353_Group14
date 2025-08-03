@@ -8,6 +8,7 @@ from routes.notifications import notifications_bp
 from routes.matching import matching_bp
 from routes.events import events_bp
 from routes.volunteer_history import volunteer_history_bp
+from routes.notifications import get_notifications_bp
 
 def create_app():
     app = Flask(__name__)
@@ -21,6 +22,7 @@ def create_app():
     app.register_blueprint(matching_bp)
     app.register_blueprint(events_bp)
     app.register_blueprint(volunteer_history_bp)
+    app.register_blueprint(get_notifications_bp)
 
     return app
 
