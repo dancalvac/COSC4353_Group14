@@ -49,6 +49,7 @@ function EventManagementPage() {
         <div className="emp-sidebar-links">
           <div className="emp-sidebar-link active">Events</div>
           <div className="emp-sidebar-link" onClick={handleNavToVolMatching}>Volunteer Matching</div>
+          <div className="emp-sidebar-link" onClick={() => navigate("/dataReport")}>Data Report</div>
         </div>
         <div className="emp-logout" onClick={handleLogout}>
           Log Out

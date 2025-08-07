@@ -109,6 +109,7 @@ function EventCreate() {
         <div className="ec-sidebar-links">
           <div className="ec-sidebar-link active">Events</div>
           <div className="ec-sidebar-link" onClick={handleNavToVolMatching}>Volunteer Matching</div>
+          <div className="ec-sidebar-link" onClick={() => navigate("/dataReport")}>Data Report</div>
         </div>
         <div className="ec-logout" onClick={handleLogout}>
           Log Out

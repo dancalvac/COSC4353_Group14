@@ -77,6 +77,7 @@ function AdminMatching() {
                     <div className="am-sidebar-item active">
                         Volunteer Matching
                     </div>
+                    <div className="emp-sidebar-link" onClick={() => navigate("/dataReport")}>Data Report</div>
                 </div>
                 <div
                     className="am-logout-button"

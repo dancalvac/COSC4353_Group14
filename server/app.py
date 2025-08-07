@@ -9,6 +9,7 @@ from routes.matching import matching_bp
 from routes.events import events_bp
 from routes.volunteer_history import volunteer_history_bp
 from routes.notifications import get_notifications_bp
+from routes.report import datareport_bp
 
 def create_app():
     app = Flask(__name__)
@@ -23,6 +24,7 @@ def create_app():
     app.register_blueprint(events_bp)
     app.register_blueprint(volunteer_history_bp)
     app.register_blueprint(get_notifications_bp)
+    app.register_blueprint(datareport_bp)
 
     return app
 
