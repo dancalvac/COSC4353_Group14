@@ -7,7 +7,8 @@ import './VolunteerDashboard.css';
 function VolunteerDashboard(){
     
     const [userDetails, setUserDetails] = useState([]);
-    
+    const [skills, setSkills] = useState([]);
+    const [availability, setAvailability] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -21,6 +22,9 @@ function VolunteerDashboard(){
         try{
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/displayVolunteerProfile?userId=${userIdParam}`);
             setUserDetails(response.data);
+            setSkills(response.data.skills || []);
+            setAvailability(response.data.availability || []);
+            
             //console.log('Fetched user details:', response.data);
         } catch (error) {
             console.error('Fetch error:', error);
@@ -29,6 +33,15 @@ function VolunteerDashboard(){
             setLoading(false);
         }
     }
+
+    const formatAvailability = (availability) => {
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        return days.map((dayName, dayIndex) => ({
+            day: dayName,
+            start: availability[dayIndex * 2],
+            end: availability[dayIndex * 2 + 1]
+        }));
+    };
 
     const navigateToDashboard = (e) => {
         // Navigate to Dashboard
@@ -138,19 +151,74 @@ function VolunteerDashboard(){
                                         <span className="vd-info-label">Email: </span>
                                         <span className="vd-info-value">{userDetails.email || 'Not provided'}</span>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div className="vd-profile-card">
-                                <div className="vd-card-header">
-                                    <h3>Address Information</h3>
-                                </div>
-                                <div className="vd-card-content">
                                     <div className="vd-info-row">
                                         <span className="vd-info-label">Address: </span>
                                         <span className="vd-info-value">{userDetails.address || 'Not provided'}</span>
                                     </div>
                                 </div>
+                            </div>
+
+                            
+                            <div className="vd-profile-card">
+                                <div className="vd-card-header">
+                                    <h3>Preferences</h3>
+                                </div>
+                                <div className="vd-card-content">
+                                    <div className="vd-info-row">
+                                        
+                                        <span className="vd-info-value">{userDetails.preferences || 'Not provided'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="vd-profile-card">
+                                <div className="vd-card-header">
+                                    <h3>My Skills</h3>
+                                </div>
+                                <div className="vd-card-content">
+                                    <div className="vd-info-row">
+                                    
+                                    
+                                    {skills.length > 0 ? 
+                                        (<>
+                                            <ul className="vd-skills-list">
+                                                {skills.map((skill, index) => (
+                                                    <li key={index} className="vd-info-value">{skill}</li>
+                                                ))}
+                                            </ul>
+                                        </>) : 
+                                        (<>
+                                            <span className="vd-info-value">Not provided</span>
+                                        </>)
+                                    }
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="vd-profile-card">
+                            <div className="vd-card-header">
+                                <h3>My Schedule</h3>
+                            </div>
+                            <div className="vd-card-content">
+                                <div className="vd-info-row">
+                                    {availability.length > 0 ? (
+                                        <ul className="vd-availability-list">
+                                            {formatAvailability(availability).map((schedule, index) => (
+                                
+                                                    (schedule.start === "0:00:00" || schedule.end === "0:00:00") ?
+                                                        (<li key={index} className="vd-info-value">
+                                                            <strong>{schedule.day}:</strong> Not Available
+                                                        </li>) :
+                                                        (<li key={index} className="vd-info-value">
+                                                            <strong>{schedule.day}:</strong> {schedule.start} - {schedule.end}
+                                                        </li>)
+                                                    
+                                                
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <span className="vd-info-value">Not provided</span>
+                                    )}
+                                </div>
+                            </div>
                             </div>
                         </div>
 
