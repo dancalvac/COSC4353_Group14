@@ -190,7 +190,22 @@ def get_volunteer_profile():
         
         select_query = """
         SELECT full_name, email, 
-        CONCAT(address_one, ' ', address_two, ' ', city, ', ', state, ' ', zipcode) as address
+        CONCAT(address_one, ' ', address_two, ' ', city, ', ', state, ' ', zipcode) as address,
+        preferences,
+        monday_start,
+        monday_end,
+        tuesday_start,
+        tuesday_end,
+        wednesday_start,
+        wednesday_end,
+        thursday_start,
+        thursday_end,
+        friday_start,
+        friday_end,
+        saturday_start,
+        saturday_end,
+        sunday_start,
+        sunday_end
         FROM Users
         WHERE user_id = %s"""
         cursor.execute(select_query, (user_id, ))
@@ -198,16 +213,39 @@ def get_volunteer_profile():
         if not user:
             return jsonify({'error': 'User not found'}), 404
         
+        availability = user[4:]
+        availability_string = []
+        for day in availability:
+            if day is not None:
+                availability_string.append((str(day)))
+            
+        
         #When a person is first registering the address will  be blank
         #address = user[2]
         #if not address:
          #   address = 'N/A'
         
+        select_query = """
+        SELECT skill
+        FROM UserSkills
+        WHERE user_id = %s
+        """
+        cursor.execute(select_query, (user_id, ))
+        skills = cursor.fetchall()
+        filled_skills = []
+        if skills:
+            filled_skills = [skill[0] for skill in skills if skill[0] and skill[0].strip()]
+        
+
         return jsonify({
             'message': 'User details',
             'full_name': user[0],
             'email': user[1],
-            'address': user[2]}), 200
+            'address': user[2],
+            'preferences': user[3],
+            'skills': filled_skills,
+            'availability': availability_string
+            }), 200
 
 
     except Exception as e:
