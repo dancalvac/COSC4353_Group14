@@ -192,3 +192,34 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Node.js (for your React frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# React Build Output
+build/
+dist/
+
+# Environment files (additional patterns)
+.env.test.local
+.env.*.local
+
+# IDE Files (if not already covered)
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# Database files (if you have local DB files)
+*.db
+*.sqlite3
+
+# Coverage reports (testing)
+coverage/
+.nyc_output

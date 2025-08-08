@@ -42,7 +42,7 @@ def test_login():
                 }
             }), 200
         else:
-            return jsonify({'error': 'Invalid credentials'}), 401
+            return jsonify({'error': 'Invalid email or password'}), 401
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
