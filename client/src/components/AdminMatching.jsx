@@ -29,6 +29,7 @@ function AdminMatching() {
 
     const handleLogout = () => {
         console.log("Logout admin")
+        localStorage.removeItem('user');
         navigate('/');
     };
 
@@ -46,6 +47,13 @@ function AdminMatching() {
             });
 
             console.log("Notification sent:", response.data);
+
+            // Add event to volunteerHistory
+            const update_volunteer_history = await axios.post(`${import.meta.env.VITE_API_URL}/update_volunteer_history`, {
+                user_id: volunteer.id,
+                event_id: event.id,
+                event_date: event.date
+            });
 
             // Remove matched volunteer from list
             setVolunteers(prev => prev.filter(v => v.id !== volunteerId));
@@ -69,6 +77,7 @@ function AdminMatching() {
                     <div className="am-sidebar-item active">
                         Volunteer Matching
                     </div>
+                    <div className="emp-sidebar-link" onClick={() => navigate("/dataReport")}>Data Report</div>
                 </div>
                 <div
                     className="am-logout-button"

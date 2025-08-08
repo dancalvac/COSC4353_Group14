@@ -1,12 +1,11 @@
 from flask import Blueprint, request, jsonify
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from db import get_connection
 
 profile_bp = Blueprint('profile', __name__)
 
-
 @profile_bp.route('/updateUserProfile', methods=['PATCH'])
-def test_save_profile():
+def save_profile():
     conn = None
     cursor = None
     try:
@@ -15,6 +14,7 @@ def test_save_profile():
         user_id = data.get('userId')
         email = data.get('email')
         password = data.get('password')
+        newPassword = data.get('newPassword')
         address_one = data.get('addressOne')
         address_two = data.get('addressTwo')
         city = data.get('city')
@@ -68,19 +68,45 @@ def test_save_profile():
         
         if not check_password_hash(hashed_password[0], password):
             return jsonify({'error': 'Incorrect password'}), 401
-        update_query = """UPDATE Users
-                        SET	    full_name = %s,
+        
+        parameters = []
+
+        if newPassword:
+            # Hash the new password before storing
+            new_hashed_password = generate_password_hash(newPassword)
+        
+            update_query = """UPDATE Users
+                            SET password = %s, full_name = %s,
                                 address_one = %s, address_two = %s, city = %s, 
                                 state = %s, zipcode = %s, preferences = %s, 
                                 monday_start = %s, monday_end = %s, 
                                 tuesday_start = %s, tuesday_end = %s, 
                                 wednesday_start = %s, wednesday_end = %s, 
                                 thursday_start = %s, thursday_end = %s, 
-                                friday_start =  %s, friday_end = %s, 
+                                friday_start = %s, friday_end = %s, 
                                 saturday_start = %s, saturday_end = %s, 
                                 sunday_start = %s, sunday_end = %s
-                        WHERE user_id = %s AND email = %s"""
-        parameters = (
+                            WHERE user_id = %s AND email = %s"""
+        
+            parameters = [
+                new_hashed_password,  # Include hashed password first
+            ]
+        else:
+            # Don't update password
+            update_query = """UPDATE Users
+                            SET full_name = %s,
+                                address_one = %s, address_two = %s, city = %s, 
+                                state = %s, zipcode = %s, preferences = %s, 
+                                monday_start = %s, monday_end = %s, 
+                                tuesday_start = %s, tuesday_end = %s, 
+                                wednesday_start = %s, wednesday_end = %s, 
+                                thursday_start = %s, thursday_end = %s, 
+                                friday_start = %s, friday_end = %s, 
+                                saturday_start = %s, saturday_end = %s, 
+                                sunday_start = %s, sunday_end = %s
+                            WHERE user_id = %s AND email = %s"""
+        
+        parameters.extend([
             full_name,
             address_one, 
             address_two, 
@@ -104,10 +130,16 @@ def test_save_profile():
             sunday_end,
             user_id,
             email
-        )
-        cursor.execute(update_query, parameters)
+        ])
 
+        cursor.execute(update_query, parameters)
         
+
+        #Delete previous skills since user would be inserting newer skills
+        delete_query = """
+        DELETE from UserSkills
+        WHERE user_id = %s;"""
+        cursor.execute(delete_query, (user_id, ))
         #Now on inserting the skills
         skills = [
             (skill1, user_id),
@@ -121,13 +153,6 @@ def test_save_profile():
             cursor.executemany(insert_query, filled_skills)
         
         conn.commit()
-        #for skill in skills:
-         #   if skill:
-          #      cursor.execute(insert_query, (skill, user_id))
-        #conn.commit()
-                #else:
-                 #   conn.rollback()  # Rollback if something went wrong
-                  #  return jsonify({'error': 'Failed to add skills'}), 500
         
         return jsonify({
                 'message': 'User updated successfully!',
@@ -148,3 +173,88 @@ def test_save_profile():
         if conn:
             conn.close()
 
+
+@profile_bp.route('/displayVolunteerProfile', methods=['GET'])
+def get_volunteer_profile():
+    conn = None
+    cursor = None
+    try:
+        user_id = request.args.get('userId')
+
+        if not user_id:
+            
+            return jsonify({'error': 'User ID is required'}), 400
+        
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        select_query = """
+        SELECT full_name, email, 
+        CONCAT(address_one, ' ', address_two, ' ', city, ', ', state, ' ', zipcode) as address,
+        preferences,
+        monday_start,
+        monday_end,
+        tuesday_start,
+        tuesday_end,
+        wednesday_start,
+        wednesday_end,
+        thursday_start,
+        thursday_end,
+        friday_start,
+        friday_end,
+        saturday_start,
+        saturday_end,
+        sunday_start,
+        sunday_end
+        FROM Users
+        WHERE user_id = %s"""
+        cursor.execute(select_query, (user_id, ))
+        user = cursor.fetchone()
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        availability = user[4:]
+        availability_string = []
+        for day in availability:
+            if day is not None:
+                availability_string.append((str(day)))
+            
+        
+        #When a person is first registering the address will  be blank
+        #address = user[2]
+        #if not address:
+         #   address = 'N/A'
+        
+        select_query = """
+        SELECT skill
+        FROM UserSkills
+        WHERE user_id = %s
+        """
+        cursor.execute(select_query, (user_id, ))
+        skills = cursor.fetchall()
+        filled_skills = []
+        if skills:
+            filled_skills = [skill[0] for skill in skills if skill[0] and skill[0].strip()]
+        
+
+        return jsonify({
+            'message': 'User details',
+            'full_name': user[0],
+            'email': user[1],
+            'address': user[2],
+            'preferences': user[3],
+            'skills': filled_skills,
+            'availability': availability_string
+            }), 200
+
+
+    except Exception as e:
+        print(f"Get error: {str(e)}")  # Debug print
+        
+        return jsonify({'error': str(e)}), 500
+    finally:
+        # Clean up connections
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()

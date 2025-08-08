@@ -11,7 +11,9 @@ import VolunteerNoti from './components/VolunteerNoti';
 import EventManagement from './components/EventManagement';
 import EventCreate from './components/EventCreate';
 import EventEdit from './components/EventEdit';
-import AdminMatching from './components/AdminMatching'; 
+import AdminMatching from './components/AdminMatching';
+import VolunteerDashboard from './components/VolunteerDashboard';
+import DataReport from "./components/DataReport";
 import Testing from './components/Testing'; // Importing the Testing component
 
 function App() {
@@ -30,8 +32,10 @@ function App() {
         <Route path="/volunteerNotifications" element={<VolunteerNoti />} />
         <Route path="/eventManagement" element={<EventManagement />} />
         <Route path="/eventCreate" element={<EventCreate />} />
-        <Route path="/eventEdit" element={<EventEdit />} />
+        <Route path="/eventEdit/:eventId" element={<EventEdit />} />
         <Route path="/adminMatching" element={<AdminMatching />} />
+        <Route path="/volunteerDashboard" element={<VolunteerDashboard />} />
+        <Route path="/dataReport" element={<DataReport />} />
         <Route path="/test" element={<Testing/>} />
         {/* Add more routes as needed */}
         <Route path="*" element={<Navigate to="/home" />} /> {/* Redirects any unknown routes to home page */}

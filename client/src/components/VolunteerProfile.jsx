@@ -9,6 +9,7 @@ function VolunteerProfile(){
     const [userId, setUserId] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [addressOne, setAddressOne] = useState('');
     const [addressTwo, setAddressTwo] = useState('');
@@ -76,11 +77,11 @@ function VolunteerProfile(){
     };
 
 
-    const navigateToProfile = (e) => {
-        // Navigate to Profile
+    const navigateToDashboard = (e) => {
+        // Navigate to Dashboard
         e.preventDefault();
-        console.log("Navigate to Profile page");
-        navigate('/volunteerProfile');
+        console.log("Navigate to Dashboard page");
+        navigate('/volunteerDashboard');
     };
 
     const navigateToVolunteerHistory = (e) => {
@@ -144,6 +145,7 @@ function VolunteerProfile(){
                 userId,
                 email,
                 password,
+                newPassword,
                 addressOne,
                 addressTwo,
                 city,
@@ -192,9 +194,9 @@ function VolunteerProfile(){
     };
 
     const logOut = (e) => {
-        // Log the user out
         e.preventDefault();
         console.log("Logging the user out");
+        localStorage.removeItem('user'); // Clear localStorage on logout
         navigate('/home');
     };
 
@@ -227,7 +229,7 @@ function VolunteerProfile(){
             {/* Sidebar Navigation */}
             <div className="vp-sidebar">
                 <div className="vp-sidebar-links">
-                    <div className="vp-sidebar-item active" onClick={navigateToProfile}>
+                    <div className="vp-sidebar-item active" onClick={navigateToDashboard}>
                         Profile
                     </div>
                     <div className="vp-sidebar-item" onClick={navigateToVolunteerHistory}>
@@ -245,11 +247,22 @@ function VolunteerProfile(){
                 <form className="d-flex flex-column main-content-div" onSubmit={handleSubmit}> {/*Form that holds all the main content*/}
                     <div className="main-content-div-header d-flex justify-content-between align-items-center"> {/*Header*/}
                         <div className="w-50 welcome-text"> {/*Welcome Text*/}
-                            Welcome!
+                            Edit Profile
                         </div>
+                        <div className="d-flex gap-3">
+                        <button
+                            type="button"
+                            className="btn btn-danger"
+                            style={{width: '140px'}}
+                            onClick={navigateToDashboard}
+                        >
+                            Cancel
+                        </button>
+                        
                         <button 
                             type="submit" 
-                            className="btn btn-primary w-25" 
+                            className="btn btn-primary"
+                            style={{width: '140px'}}
                             disabled={loading}
                         >
                             {loading ? (
@@ -261,6 +274,7 @@ function VolunteerProfile(){
                                 'Save'
                             )}
                         </button>
+                        </div>
                     </div>
                     {/* Error/Success Messages */}
                     {error && (
@@ -336,7 +350,7 @@ function VolunteerProfile(){
                             </div>
                             <div className="row mx-1 my-3"> {/*Password*/}
                                 <div className="col">
-                                    <label htmlFor="password">Password</label>
+                                    <label htmlFor="password">Password*</label>
                                     <input 
                                         type="password" 
                                         className="form-control border border-black border-2" 
@@ -344,6 +358,19 @@ function VolunteerProfile(){
                                         value={password}
                                         onChange={handleInputChange(setPassword)} 
                                         required
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+                            <div className="row mx-1 my-3"> {/*Password*/}
+                                <div className="col">
+                                    <label htmlFor="new-password">New Password (optional)</label>
+                                    <input 
+                                        type="password" 
+                                        className="form-control border border-black border-2" 
+                                        id="new-password" 
+                                        value={newPassword}
+                                        onChange={handleInputChange(setNewPassword)}
                                         disabled={loading}
                                     />
                                 </div>

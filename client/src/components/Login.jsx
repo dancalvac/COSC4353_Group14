@@ -31,7 +31,7 @@ function Login(){
             if (userData.user.role === 'Admin') {
                 navigate('/eventManagement'); // Create this route
             } else {
-                navigate('/volunteerProfile'); // Create this route
+                navigate('/volunteerDashboard'); // Create this route
             }
             
         } catch (error) {

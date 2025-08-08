@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import './VolunteerNoti.css';
+import axios from 'axios';
 
 function VolunteerNoti() {
     const navigate = useNavigate();
+    const [notifications, setNotifications] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const handleProfile = () => {
-        console.log("Navigate to profile");
-        navigate('/volunteerProfile');
+    const handleDashboard = () => {
+        console.log("Navigate to dashboard");
+        navigate('/volunteerDashboard');
     };
 
     const handleHistory = () => {
@@ -20,23 +24,38 @@ function VolunteerNoti() {
         navigate('/');
     };
 
-    // Sample notifications data - you can replace this with real data later
-    const notifications = [
-        {
-            id: 1,
-            message: "You have been selected to work at Food Bank Fun! This event is located at 1234 Test Street, Houston, TX and will occur at 2:00 PM on February 16, 2025.",
-            date: "February 14, 2025",
-            priority: "high"
-        }
-        // Add more notifications here as needed
-    ];
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                setLoading(true);
+                const user = JSON.parse(localStorage.getItem('user'));
+                const userId = user?.user_id;
+
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/get_notification`, {
+                    params: { userID: userId }
+                });
+                setNotifications(res.data.notifications || []);
+                setLoading(false);
+            } catch (err) {
+                console.error("Failed to fetch notifications:", err);
+                setError("Error loading notifications.");
+                console.error('Error fetching volunteer history:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchNotifications();
+    }, []);
+
+    if (loading) return <div className="vh-loading">Loading volunteer notifications...</div>;
+    if (error) return <div className="vh-error">Error: {error}</div>;
 
     return (
         <div className="vn-volunteer-noti">
             {/* Sidebar Navigation */}
             <div className="vn-sidebar">
                 <div className="vn-sidebar-links">
-                    <div className="vn-sidebar-item" onClick={handleProfile}>
+                    <div className="vn-sidebar-item" onClick={handleDashboard}>
                         Profile
                     </div>
                     <div className="vn-sidebar-item" onClick={handleHistory}>

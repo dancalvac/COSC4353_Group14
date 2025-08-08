@@ -1,0 +1,36 @@
+.dr-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+}
+
+.dr-btn {
+  background: #29b6f6;
+  color: #fff;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dr-btn:hover {
+  background: #0288d1;
+}
+
+.dr-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+  background: #fff;
+}
+.dr-table th, .dr-table td {
+  border: 1px solid #bbb;
+  padding: 8px 12px;
+  text-align: left;
+}
+.dr-table th {
+  background: #f0f0f0;
+}

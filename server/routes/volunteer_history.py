@@ -1,36 +1,55 @@
 from flask import Blueprint, jsonify, request
+from db import get_connection
 
 volunteer_history_bp = Blueprint('volunteer_history', __name__)
 
-# Sample volunteer history data - you would later retrieve this from a database
-VOLUNTEER_HISTORY = {
-    "volunteer1@example.com": [
-        {
-            "participationStatus": "Completed",
-            "eventName": "Food Bank Fair",
-            "location": "1234 Main Street, Houston, TX",
-            "requiredSkills": "Teamwork, Communication",
-            "urgency": "Medium",
-            "eventDate": "February 14, 2024",
-            "eventDescription": "Lorem ipsum dolor sit amet"
-        },
-        {
-            "participationStatus": "Upcoming",
-            "eventName": "Community Garden Cleanup",
-            "location": "5678 Park Avenue, Houston, TX",
-            "requiredSkills": "Physical labor, Gardening",
-            "urgency": "Low",
-            "eventDate": "August 25, 2025",
-            "eventDescription": "Help clean up and prepare the community garden for fall planting."
-        }
-    ]
-}
-
 @volunteer_history_bp.route('/volunteer/history', methods=['GET'])
 def get_volunteer_history():
-    # In a real app, you would get the user email from a session or token
-    email = request.args.get('email', 'volunteer1@example.com')
+    try:
+        # In a real app, you would get the user email from a session or token
+        userID = request.args.get('userID')
+
+        if not userID:
+            return jsonify({"error": "Missing user id"}), 400
+        
+        #Form connection with database
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+        #Create query to insert into volunteer history
+        cursor.execute(f'''
+            SELECT 
+                uh.event_status,
+                e.event_id,
+                e.event_name,
+                e.description,
+                CONCAT_WS(', ', e.address_one, e.address_two, e.city, e.state, e.zipcode) AS full_address,
+                e.urgency,
+                e.event_date,
+                GROUP_CONCAT(es.skill SEPARATOR ', ') AS required_skills
+            FROM UserHistory uh
+            JOIN Events e ON uh.event_id = e.event_id
+            LEFT JOIN EventSkills es ON e.event_id = es.event_id
+            WHERE uh.user_id = {userID}
+            GROUP BY e.event_id, uh.event_status, e.event_name, e.description, e.address_one, e.address_two, e.city, e.state, e.zipcode, e.urgency, e.event_date
+        ''')
+        history = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        formatted_history = []
+        for row in history:
+            formatted_history.append({
+                "participationStatus": row["event_status"],
+                "eventName": row["event_name"],
+                "location": row["full_address"],
+                "requiredSkills": row["required_skills"] or "N/A",
+                "urgency": row["urgency"],
+                "eventDate": row["event_date"],
+                "eventDescription": row["description"],
+            })
+
+        return jsonify({"volunteer_history": formatted_history}), 200
+    except Exception as e:
+        return jsonify({"error": "Server Error", "error_message": f"{e}"}), 500
     
-    # Return the volunteer's history or an empty list if not found
-    history = VOLUNTEER_HISTORY.get(email, [])
-    return jsonify({"volunteer_history": history})
