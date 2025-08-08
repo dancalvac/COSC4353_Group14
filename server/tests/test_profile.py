@@ -1,9 +1,5 @@
 import pytest
 from server.app import create_app
-<<<<<<< HEAD
-from server.routes.profile import HARDCODED_VOLUNTEER_PROFILE
-=======
->>>>>>> ac156ad (Removed hardcoded details for test_profile.py)
 
 @pytest.fixture
 def client():

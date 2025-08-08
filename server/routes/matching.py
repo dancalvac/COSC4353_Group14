@@ -11,7 +11,7 @@ def get_matching_data():
         #Form connection with database
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
-        #Create query to grab all events that havent hit the max volunteer limit
+        #Create query to grab all events that have not hit the max volunteer limit
         cursor.execute('''
             SELECT 
                 e.event_id, 
@@ -79,23 +79,27 @@ def add_event_to_user_history():
 
         if not (user_id and event_id and event_date):
             return jsonify({"error":"User ID or Event ID or Event Date is null"}), 400
-        else:
-            formatted_event_date = datetime.strptime(event_date, "%m-%d-%Y").strftime("%Y-%m-%d %H:%M:%S")
+        
+        try:
+            # Expecting MM-DD-YYYY input; parse and format to MySQL DATETIME string
+            formatted_event_date = datetime.strptime(event_date, "%m-%d-%Y").strftime("%Y-%m-%d 12:00:00")
+        except ValueError:
+            return jsonify({"error": "Invalid date format, expected MM-DD-YYYY"}), 400
 
         #Form connection with database
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
         #Create query to first get the number of already assigned users to the given event
-        cursor.execute(f'''
+        cursor.execute('''
             SELECT 
                 e.max_volunteers,
                 COUNT(uh.user_id) AS assigned_count
             FROM Events e
             LEFT JOIN UserHistory uh 
                 ON e.event_id = uh.event_id AND uh.event_status = 'Assigned'
-            WHERE e.event_id = {event_id}
+            WHERE e.event_id = %s
             GROUP BY e.event_id
-        ''')
+        ''', (event_id,))
         row = cursor.fetchone()
 
         # Validate assigned count is less than max volunteers
@@ -103,10 +107,10 @@ def add_event_to_user_history():
             return jsonify({'error': 'Event is already at max capacity'}), 400
         
         # Update database when we know assigned count is less than max
-        cursor.execute(f'''
+        cursor.execute('''
             INSERT INTO UserHistory (event_status, event_id, user_id, assigned_date) 
-            VALUES ("Assigned", {event_id}, {user_id}, {formatted_event_date})
-        ''')
+            VALUES (%s, %s, %s, %s)
+        ''', ("Assigned", event_id, user_id, formatted_event_date))
         conn.commit()
 
         cursor.close()
